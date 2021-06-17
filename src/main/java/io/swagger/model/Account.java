@@ -8,9 +8,13 @@ import io.swagger.model.Balance;
 import io.swagger.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
+
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -20,8 +24,12 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T13:48:13.918Z[GMT]")
 
+
+
 @Entity
 public class Account   {
+
+  @Id
   @JsonProperty("IBAN")
   private String IBAN = null;
 
@@ -108,6 +116,7 @@ public class Account   {
   private AccountStatusEnum accountStatus = null;
 
   @JsonProperty("user")
+  @OneToOne
   private User user = null;
 
   public Account IBAN(String IBAN) {
@@ -171,6 +180,7 @@ public class Account   {
     this.dailyLimit = dailyLimit;
   }
 
+  @OneToOne
   public Account balance(Balance balance) {
     this.balance = balance;
     return this;

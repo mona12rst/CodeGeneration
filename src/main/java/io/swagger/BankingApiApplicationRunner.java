@@ -41,7 +41,7 @@ public class BankingApiApplicationRunner implements ApplicationRunner
         addressRepository.save(address);
 
         User user1 = new User().username("Mona")
-                .userRole(User.UserRoleEnum.USER)
+                .userRole(UserRoleEnum.USER)
                 .dailyLimit(BigDecimal.valueOf(500))
                 .dateOfBirth("some date")
                 .emailAddress("email@address")

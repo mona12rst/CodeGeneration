@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.model.Address;
+import io.swagger.model.UserRoleEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
@@ -34,35 +35,35 @@ public class UserToCreate   {
   /**
    * Gets or Sets sex
    */
-  public enum SexEnum {
-    MALE("male"),
-    
-    FEMALE("female");
-
-    private String value;
-
-    SexEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static SexEnum fromValue(String text) {
-      for (SexEnum b : SexEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-  @JsonProperty("sex")
-  private SexEnum sex = null;
+//  public enum SexEnum {
+//    MALE("male"),
+//
+//    FEMALE("female");
+//
+//    private String value;
+//
+//    SexEnum(String value) {
+//      this.value = value;
+//    }
+//
+//    @Override
+//    @JsonValue
+//    public String toString() {
+//      return String.valueOf(value);
+//    }
+//
+//    @JsonCreator
+//    public static SexEnum fromValue(String text) {
+//      for (SexEnum b : SexEnum.values()) {
+//        if (String.valueOf(b.value).equals(text)) {
+//          return b;
+//        }
+//      }
+//      return null;
+//    }
+//  }
+//  @JsonProperty("sex")
+//  private SexEnum sex = null;
 
   @JsonProperty("dateOfBirth")
   private String dateOfBirth = null;
@@ -79,36 +80,7 @@ public class UserToCreate   {
   @JsonProperty("primaryAddress")
   private Address primaryAddress = null;
 
-  /**
-   * Gets or Sets userRole
-   */
-  public enum UserRoleEnum {
-    CUSTOMER("customer"),
-    
-    USER("user");
 
-    private String value;
-
-    UserRoleEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static UserRoleEnum fromValue(String text) {
-      for (UserRoleEnum b : UserRoleEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
   @JsonProperty("userRole")
   private UserRoleEnum userRole = null;
 
@@ -192,25 +164,25 @@ public class UserToCreate   {
     this.emailAddress = emailAddress;
   }
 
-  public UserToCreate sex(SexEnum sex) {
-    this.sex = sex;
-    return this;
-  }
-
-  /**
-   * Get sex
-   * @return sex
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    public SexEnum getSex() {
-    return sex;
-  }
-
-  public void setSex(SexEnum sex) {
-    this.sex = sex;
-  }
+//  public UserToCreate sex(SexEnum sex) {
+//    this.sex = sex;
+//    return this;
+//  }
+//
+//  /**
+//   * Get sex
+//   * @return sex
+//   **/
+//  @Schema(required = true, description = "")
+//      @NotNull
+//
+//    public SexEnum getSex() {
+//    return sex;
+//  }
+//
+//  public void setSex(SexEnum sex) {
+//    this.sex = sex;
+//  }
 
   public UserToCreate dateOfBirth(String dateOfBirth) {
     this.dateOfBirth = dateOfBirth;
@@ -348,7 +320,7 @@ public class UserToCreate   {
         Objects.equals(this.firstName, userToCreate.firstName) &&
         Objects.equals(this.lastName, userToCreate.lastName) &&
         Objects.equals(this.emailAddress, userToCreate.emailAddress) &&
-        Objects.equals(this.sex, userToCreate.sex) &&
+//        Objects.equals(this.sex, userToCreate.sex) &&
         Objects.equals(this.dateOfBirth, userToCreate.dateOfBirth) &&
         Objects.equals(this.mobileNumber, userToCreate.mobileNumber) &&
         Objects.equals(this.dailyLimit, userToCreate.dailyLimit) &&
@@ -359,7 +331,7 @@ public class UserToCreate   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(username, firstName, lastName, emailAddress, sex, dateOfBirth, mobileNumber, dailyLimit, transactionLimit, primaryAddress, userRole);
+    return Objects.hash(username, firstName, lastName, emailAddress/*, sex*/, dateOfBirth, mobileNumber, dailyLimit, transactionLimit, primaryAddress, userRole);
   }
 
   @Override
@@ -371,7 +343,7 @@ public class UserToCreate   {
     sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");
     sb.append("    lastName: ").append(toIndentedString(lastName)).append("\n");
     sb.append("    emailAddress: ").append(toIndentedString(emailAddress)).append("\n");
-    sb.append("    sex: ").append(toIndentedString(sex)).append("\n");
+//    sb.append("    sex: ").append(toIndentedString(sex)).append("\n");
     sb.append("    dateOfBirth: ").append(toIndentedString(dateOfBirth)).append("\n");
     sb.append("    mobileNumber: ").append(toIndentedString(mobileNumber)).append("\n");
     sb.append("    dailyLimit: ").append(toIndentedString(dailyLimit)).append("\n");

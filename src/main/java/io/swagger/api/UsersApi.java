@@ -81,7 +81,7 @@ public interface UsersApi
     @RequestMapping(value = "/users/{userId}",
             consumes = {"application/json"},
             method = RequestMethod.PUT)
-    ResponseEntity<Void> editUser(@Parameter(in = ParameterIn.PATH, description = "Enter userId to fetch the user detail", required = true, schema = @Schema()) @PathVariable("userId") Integer userId, @Parameter(in = ParameterIn.DEFAULT, description = "the user to be edited", required = true, schema = @Schema()) @Valid @RequestBody UserToCreate body);
+    ResponseEntity<User> editUser(@Parameter(in = ParameterIn.PATH, description = "Enter userId to fetch the user detail", required = true, schema = @Schema()) @PathVariable("userId") Integer userId, @Parameter(in = ParameterIn.DEFAULT, description = "the user to be edited", required = true, schema = @Schema()) @Valid @RequestBody UserToCreate body);
 
 
 //    @Operation(summary = "Get accounts for a user", description = "", security = {

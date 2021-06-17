@@ -90,42 +90,7 @@ public class User   {
   @OneToOne // considering user can have only one primary address
   private Address primaryAddress = null;
 
-  /**
-   * Gets or Sets userRole
-   */
-  // the implements comes from Wims code
-  public enum UserRoleEnum implements GrantedAuthority {
-    CUSTOMER("customer"),
 
-    USER("user");
-
-    private String value;
-
-    UserRoleEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static UserRoleEnum fromValue(String text) {
-      for (UserRoleEnum b : UserRoleEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-    // the override for the granted authority
-    @Override
-    public String getAuthority() {
-      return null;
-    }
-  }
 //  @ElementCollection(fetch = FetchType.EAGER)
   @JsonProperty("userRole")
   private UserRoleEnum userRole = null;

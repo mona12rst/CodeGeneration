@@ -134,5 +134,6 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.h2database:h2:1.4.200" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-core:5.4.6" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.1.17.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: io.jsonwebtoken:jjwt:0.9.1" level="project" />
   </component>
 </module>

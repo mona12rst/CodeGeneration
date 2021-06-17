@@ -126,7 +126,7 @@ public class User   {
       return null;
     }
   }
-  @ElementCollection(fetch = FetchType.EAGER)
+//  @ElementCollection(fetch = FetchType.EAGER)
   @JsonProperty("userRole")
   private UserRoleEnum userRole = null;
 

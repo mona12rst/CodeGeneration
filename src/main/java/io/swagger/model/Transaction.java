@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -72,13 +73,14 @@ public class Transaction   {
     }
   }
   @JsonProperty("TransactionType")
-  private TransactionTypeEnum transactionType = null;
+  private TransactionTypeEnum transactionType;
 
   @JsonProperty("Date")
-  private LocalDate date = null;
+  private LocalDate date;
 
+  @OneToOne
   @JsonProperty("userPerforming")
-  private User userPerforming = null;
+  private User userPerforming;
 
   public Transaction transactionID(UUID transactionID) {
     this.transactionID = transactionID;

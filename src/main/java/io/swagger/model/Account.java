@@ -1,24 +1,17 @@
 package io.swagger.model;
 
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.model.Balance;
-import io.swagger.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import java.math.BigDecimal;
-
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.validation.annotation.Validated;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Account
@@ -28,7 +21,8 @@ import javax.validation.constraints.*;
 
 
 @Entity
-public class Account
+@IdClass(AccountPK.class)
+public class Account implements Serializable
 {
 
     @Id
@@ -36,15 +30,16 @@ public class Account
     @OneToOne
     private IBAN IBAN = null;
 
+    @Id
+    @GeneratedValue
+    private long accountId;
     @JsonProperty("absoluteLimit")
     private BigDecimal absoluteLimit = null;
-
     @JsonProperty("dailyLimit")
     private BigDecimal dailyLimit = null;
-
+    @OneToOne
     @JsonProperty("balance")
     private Balance balance = null;
-
     @JsonProperty("dateOfOpening")
     private String dateOfOpening = null;
     @JsonProperty("accountType")
@@ -54,6 +49,11 @@ public class Account
     @JsonProperty("user")
     @OneToOne
     private User user = null;
+
+    public long getAccountId()
+    {
+        return accountId;
+    }
 
     public Account IBAN(IBAN IBAN)
     {
@@ -128,7 +128,7 @@ public class Account
         this.dailyLimit = dailyLimit;
     }
 
-    @OneToOne
+
     public Account balance(Balance balance)
     {
         this.balance = balance;

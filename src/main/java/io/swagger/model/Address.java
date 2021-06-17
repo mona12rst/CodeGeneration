@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -18,6 +20,17 @@ import javax.validation.constraints.*;
 
 @Entity
 public class Address   {
+
+
+  @Id
+  @GeneratedValue
+  private long addressId;
+
+  public long getAddressId()
+  {
+    return addressId;
+  }
+
   @JsonProperty("street")
   private String street = null;
 

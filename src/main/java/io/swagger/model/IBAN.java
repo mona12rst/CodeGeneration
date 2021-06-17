@@ -4,13 +4,21 @@ package io.swagger.model;
 import io.swagger.exception.IncorrectIBANException;
 import lombok.*;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 
+@Entity
 public class IBAN
 {
+    @Id
+    @GeneratedValue
+    private long ibanId;
     private String countryCode;
     private int CheckNumber;
     private String bankIdentifier;
@@ -46,6 +54,10 @@ public class IBAN
 
 
 
+    }
+    public void setIbanId(long ibanId)
+    {
+        System.out.println("you cant set an iban id!");
     }
 
     public String toString()

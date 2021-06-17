@@ -1,6 +1,8 @@
 package io.swagger.model;
 
 import java.util.Objects;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -10,6 +12,8 @@ import org.threeten.bp.LocalDate;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -21,8 +25,10 @@ import javax.validation.constraints.*;
 
 @Entity
 public class Transaction   {
+  @Id
+  @GeneratedValue
   @JsonProperty("TransactionID")
-  private String transactionID = null;
+  private UUID transactionID = null;
 
   @JsonProperty("FromIBAN")
   private String fromIBAN = null;
@@ -74,7 +80,7 @@ public class Transaction   {
   @JsonProperty("userPerforming")
   private User userPerforming = null;
 
-  public Transaction transactionID(String transactionID) {
+  public Transaction transactionID(UUID transactionID) {
     this.transactionID = transactionID;
     return this;
   }
@@ -84,13 +90,12 @@ public class Transaction   {
    * @return transactionID
    **/
   @Schema(required = true, description = "")
-      @NotNull
 
-    public String getTransactionID() {
+  public UUID getTransactionID() {
     return transactionID;
   }
 
-  public void setTransactionID(String transactionID) {
+  public void setTransactionID(UUID transactionID) {
     this.transactionID = transactionID;
   }
 

@@ -120,7 +120,7 @@ public class Account   {
   @OneToOne
   private User user = null;
 
-  public Account IBAN(String IBAN) {
+  public Account IBAN(IBAN IBAN) {
     this.IBAN = IBAN;
     return this;
   }
@@ -132,11 +132,11 @@ public class Account   {
   @Schema(example = "NL02ABNA0123456789", required = true, description = "")
       @NotNull
 
-    public String getIBAN() {
+    public IBAN getIBAN() {
     return IBAN;
   }
 
-  public void setIBAN(String IBAN) {
+  public void setIBAN(IBAN IBAN) {
     this.IBAN = IBAN;
   }
 

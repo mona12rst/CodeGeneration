@@ -31,101 +31,102 @@ import java.util.List;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T13:48:13.918Z[GMT]")
 @Validated
-public interface UsersApi {
+public interface UsersApi
+{
 
     @Operation(summary = "Creates a user.", description = "creates a user, can only be done by an employee", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "User created", content = @Content(schema = @Schema(implementation = User.class))),
-        
-        @ApiResponse(responseCode = "201", description = "Created"),
-        
-        @ApiResponse(responseCode = "400", description = "Invalid input"),
-        
-        @ApiResponse(responseCode = "403", description = "Forbidden, you do not have access rights"),
-        
-        @ApiResponse(responseCode = "404", description = "Not found"),
-        
-        @ApiResponse(responseCode = "409", description = "Conflict"),
-        
-        @ApiResponse(responseCode = "500", description = "Oops, something went wrong on the server.") })
+            @SecurityRequirement(name = "bearerAuth")}, tags = {"User"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User created", content = @Content(schema = @Schema(implementation = User.class))),
+
+            @ApiResponse(responseCode = "201", description = "Created"),
+
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+
+            @ApiResponse(responseCode = "403", description = "Forbidden, you do not have access rights"),
+
+            @ApiResponse(responseCode = "404", description = "Not found"),
+
+            @ApiResponse(responseCode = "409", description = "Conflict"),
+
+            @ApiResponse(responseCode = "500", description = "Oops, something went wrong on the server.")})
     @RequestMapping(value = "/users",
-        produces = { "application/json" }, 
-        consumes = { "application/json" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<User> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody UserToCreate body);
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.POST)
+    ResponseEntity<User> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody UserToCreate body);
 
 
     @Operation(summary = "Delete user", description = "This can only be done by the logged in user as Employee or BankSuperAdmin", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "201", description = "User deleted"),
-        
-        @ApiResponse(responseCode = "400", description = "Invalid username supplied"),
-        
-        @ApiResponse(responseCode = "404", description = "User not found") })
+            @SecurityRequirement(name = "bearerAuth")}, tags = {"User"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "User deleted"),
+
+            @ApiResponse(responseCode = "400", description = "Invalid username supplied"),
+
+            @ApiResponse(responseCode = "404", description = "User not found")})
     @RequestMapping(value = "/users/{userId}",
-        method = RequestMethod.DELETE)
-    ResponseEntity<Void> deleteUser(@Parameter(in = ParameterIn.PATH, description = "Enter userId to fetch the user detail", required=true, schema=@Schema()) @PathVariable("userId") Integer userId);
+            method = RequestMethod.DELETE)
+    ResponseEntity<Void> deleteUser(@Parameter(in = ParameterIn.PATH, description = "Enter userId to fetch the user detail", required = true, schema = @Schema()) @PathVariable("userId") Integer userId);
 
 
     @Operation(summary = "Update user information", description = "This can only be done by the logged in user.", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "ok"),
-        
-        @ApiResponse(responseCode = "400", description = "Invalid user supplied"),
-        
-        @ApiResponse(responseCode = "404", description = "User not found") })
+            @SecurityRequirement(name = "bearerAuth")}, tags = {"User"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "ok"),
+
+            @ApiResponse(responseCode = "400", description = "Invalid user supplied"),
+
+            @ApiResponse(responseCode = "404", description = "User not found")})
     @RequestMapping(value = "/users/{userId}",
-        consumes = { "application/json" }, 
-        method = RequestMethod.PUT)
-    ResponseEntity<Void> editUser(@Parameter(in = ParameterIn.PATH, description = "Enter userId to fetch the user detail", required=true, schema=@Schema()) @PathVariable("userId") Integer userId, @Parameter(in = ParameterIn.DEFAULT, description = "the user to be edited", required=true, schema=@Schema()) @Valid @RequestBody UserToCreate body);
+            consumes = {"application/json"},
+            method = RequestMethod.PUT)
+    ResponseEntity<Void> editUser(@Parameter(in = ParameterIn.PATH, description = "Enter userId to fetch the user detail", required = true, schema = @Schema()) @PathVariable("userId") Integer userId, @Parameter(in = ParameterIn.DEFAULT, description = "the user to be edited", required = true, schema = @Schema()) @Valid @RequestBody UserToCreate body);
 
 
-    @Operation(summary = "Get accounts for a user", description = "", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Account.class)))),
-        
-        @ApiResponse(responseCode = "400", description = "Invalid input"),
-        
-        @ApiResponse(responseCode = "403", description = "Forbidden, you do not have access rights"),
-        
-        @ApiResponse(responseCode = "404", description = "Not found"),
-        
-        @ApiResponse(responseCode = "409", description = "Conflict"),
-        
-        @ApiResponse(responseCode = "500", description = "Oops, something went wrong on the server.") })
-    @RequestMapping(value = "/users/{userId}/accounts",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
-    ResponseEntity<List<Account>> getUserAccounts(@Parameter(in = ParameterIn.PATH, description = "Enter userId to fetch the user detail", required=true, schema=@Schema()) @PathVariable("userId") Integer userId);
+//    @Operation(summary = "Get accounts for a user", description = "", security = {
+//        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
+//    @ApiResponses(value = {
+//        @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Account.class)))),
+//
+//        @ApiResponse(responseCode = "400", description = "Invalid input"),
+//
+//        @ApiResponse(responseCode = "403", description = "Forbidden, you do not have access rights"),
+//
+//        @ApiResponse(responseCode = "404", description = "Not found"),
+//
+//        @ApiResponse(responseCode = "409", description = "Conflict"),
+//
+//        @ApiResponse(responseCode = "500", description = "Oops, something went wrong on the server.") })
+//    @RequestMapping(value = "/users/{userId}/accounts",
+//        produces = { "application/json" },
+//        method = RequestMethod.GET)
+//    ResponseEntity<List<Account>> getUserAccounts(@Parameter(in = ParameterIn.PATH, description = "Enter userId to fetch the user detail", required=true, schema=@Schema()) @PathVariable("userId") Integer userId);
 
 
     @Operation(summary = "Returns a list of users.", description = "Get a list of the registered users", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "User" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = User.class)))),
-        
-        @ApiResponse(responseCode = "201", description = "Created"),
-        
-        @ApiResponse(responseCode = "400", description = "Invalid input"),
-        
-        @ApiResponse(responseCode = "403", description = "Forbidden, you do not have access rights"),
-        
-        @ApiResponse(responseCode = "404", description = "Not found"),
-        
-        @ApiResponse(responseCode = "409", description = "Conflict"),
-        
-        @ApiResponse(responseCode = "500", description = "Oops, something went wrong on the server.") })
+            @SecurityRequirement(name = "bearerAuth")}, tags = {"User"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = User.class)))),
+
+            @ApiResponse(responseCode = "201", description = "Created"),
+
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+
+            @ApiResponse(responseCode = "403", description = "Forbidden, you do not have access rights"),
+
+            @ApiResponse(responseCode = "404", description = "Not found"),
+
+            @ApiResponse(responseCode = "409", description = "Conflict"),
+
+            @ApiResponse(responseCode = "500", description = "Oops, something went wrong on the server.")})
     @RequestMapping(value = "/users",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
-    ResponseEntity<List<User>> getUsers(@NotNull @Min(20L) @Max(50L) @Parameter(in = ParameterIn.QUERY, description = "the limit to get number of users" ,required=true,schema=@Schema(allowableValues={  }, minimum="20", maximum="50"
-)) @Valid @RequestParam(value = "limit", required = true) Long limit, @Parameter(in = ParameterIn.QUERY, description = "the user name to be searched" ,schema=@Schema()) @Valid @RequestParam(value = "lastName", required = false) String lastName, @Min(1L)@Parameter(in = ParameterIn.QUERY, description = "the userId to be fetched" ,schema=@Schema(allowableValues={  }, minimum="1"
-)) @Valid @RequestParam(value = "userId", required = false) Long userId, @Min(0L)@Parameter(in = ParameterIn.QUERY, description = "the offset to start getting users" ,schema=@Schema(allowableValues={  }
-)) @Valid @RequestParam(value = "offset", required = false) Long offset);
+            produces = {"application/json"},
+            method = RequestMethod.GET)
+    ResponseEntity<List<User>> getUsers(@NotNull @Min(20L) @Max(50L) @Parameter(in = ParameterIn.QUERY, description = "the limit to get number of users", required = true, schema = @Schema(allowableValues = {}, minimum = "20", maximum = "50"
+    )) @Valid @RequestParam(value = "limit", required = true) Long limit, @Parameter(in = ParameterIn.QUERY, description = "the user name to be searched", schema = @Schema()) @Valid @RequestParam(value = "lastName", required = false) String lastName, @Min(1L) @Parameter(in = ParameterIn.QUERY, description = "the userId to be fetched", schema = @Schema(allowableValues = {}, minimum = "1"
+    )) @Valid @RequestParam(value = "userId", required = false) Long userId, @Min(0L) @Parameter(in = ParameterIn.QUERY, description = "the offset to start getting users", schema = @Schema(allowableValues = {}
+    )) @Valid @RequestParam(value = "offset", required = false) Long offset);
 
 }
 

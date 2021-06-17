@@ -31,7 +31,8 @@ public class Account   {
 
   @Id
   @JsonProperty("IBAN")
-  private String IBAN = null;
+  @OneToOne
+  private IBAN IBAN = null;
 
   @JsonProperty("absoluteLimit")
   private BigDecimal absoluteLimit = null;

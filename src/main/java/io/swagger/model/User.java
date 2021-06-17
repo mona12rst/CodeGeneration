@@ -7,9 +7,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.model.Address;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
+
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.validation.annotation.Validated;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -19,13 +21,16 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T13:48:13.918Z[GMT]")
 
+
 @Entity
 public class User   {
+  @Id
+  @GeneratedValue
   @JsonProperty("UserID")
-  private Integer userID = null;
+  private Integer userID;
 
   @JsonProperty("Username")
-  private String username = null;
+  private String username;
 
   @JsonProperty("firstName")
   private String firstName = null;
@@ -39,35 +44,35 @@ public class User   {
   /**
    * Gets or Sets sex
    */
-  public enum SexEnum {
-    MALE("male"),
-    
-    FEMALE("female");
-
-    private String value;
-
-    SexEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static SexEnum fromValue(String text) {
-      for (SexEnum b : SexEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-  @JsonProperty("sex")
-  private SexEnum sex = null;
+//  public enum SexEnum {
+//    MALE("male"),
+//
+//    FEMALE("female");
+//
+//    private String value;
+//
+//    SexEnum(String value) {
+//      this.value = value;
+//    }
+//
+//    @Override
+//    @JsonValue
+//    public String toString() {
+//      return String.valueOf(value);
+//    }
+//
+//    @JsonCreator
+//    public static SexEnum fromValue(String text) {
+//      for (SexEnum b : SexEnum.values()) {
+//        if (String.valueOf(b.value).equals(text)) {
+//          return b;
+//        }
+//      }
+//      return null;
+//    }
+//  }
+//  @JsonProperty("sex")
+//  private SexEnum sex = null;
 
   @JsonProperty("dateOfBirth")
   private String dateOfBirth = null;
@@ -82,14 +87,16 @@ public class User   {
   private BigDecimal transactionLimit = null;
 
   @JsonProperty("primaryAddress")
+  @OneToOne // considering user can have only one primary address
   private Address primaryAddress = null;
 
   /**
    * Gets or Sets userRole
    */
-  public enum UserRoleEnum {
+  // the implements comes from Wims code
+  public enum UserRoleEnum implements GrantedAuthority {
     CUSTOMER("customer"),
-    
+
     USER("user");
 
     private String value;
@@ -113,7 +120,13 @@ public class User   {
       }
       return null;
     }
+    // the override for the granted authority
+    @Override
+    public String getAuthority() {
+      return null;
+    }
   }
+  @ElementCollection(fetch = FetchType.EAGER)
   @JsonProperty("userRole")
   private UserRoleEnum userRole = null;
 
@@ -127,9 +140,9 @@ public class User   {
    * @return userID
    **/
   @Schema(example = "1", required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public Integer getUserID() {
+  public Integer getUserID() {
     return userID;
   }
 
@@ -147,9 +160,9 @@ public class User   {
    * @return username
    **/
   @Schema(example = "john", required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public String getUsername() {
+  public String getUsername() {
     return username;
   }
 
@@ -167,9 +180,9 @@ public class User   {
    * @return firstName
    **/
   @Schema(example = "john", required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public String getFirstName() {
+  public String getFirstName() {
     return firstName;
   }
 
@@ -187,9 +200,9 @@ public class User   {
    * @return lastName
    **/
   @Schema(example = "doe", required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public String getLastName() {
+  public String getLastName() {
     return lastName;
   }
 
@@ -207,9 +220,9 @@ public class User   {
    * @return emailAddress
    **/
   @Schema(example = "john@example.com", required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public String getEmailAddress() {
+  public String getEmailAddress() {
     return emailAddress;
   }
 
@@ -217,25 +230,25 @@ public class User   {
     this.emailAddress = emailAddress;
   }
 
-  public User sex(SexEnum sex) {
-    this.sex = sex;
-    return this;
-  }
+//  public User sex(SexEnum sex) {
+//    this.sex = sex;
+//    return this;
+//  }
 
   /**
    * Get sex
    * @return sex
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public SexEnum getSex() {
-    return sex;
-  }
-
-  public void setSex(SexEnum sex) {
-    this.sex = sex;
-  }
+//    public SexEnum getSex() {
+//    return sex;
+//  }
+//
+//  public void setSex(SexEnum sex) {
+//    this.sex = sex;
+//  }
 
   public User dateOfBirth(String dateOfBirth) {
     this.dateOfBirth = dateOfBirth;
@@ -247,9 +260,9 @@ public class User   {
    * @return dateOfBirth
    **/
   @Schema(example = "15-01-1996", required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public String getDateOfBirth() {
+  public String getDateOfBirth() {
     return dateOfBirth;
   }
 
@@ -267,9 +280,9 @@ public class User   {
    * @return mobileNumber
    **/
   @Schema(example = "0753846288", required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public String getMobileNumber() {
+  public String getMobileNumber() {
     return mobileNumber;
   }
 
@@ -287,10 +300,10 @@ public class User   {
    * @return dailyLimit
    **/
   @Schema(example = "10.5", required = true, description = "")
-      @NotNull
+  @NotNull
 
-    @Valid
-    public BigDecimal getDailyLimit() {
+  @Valid
+  public BigDecimal getDailyLimit() {
     return dailyLimit;
   }
 
@@ -308,10 +321,10 @@ public class User   {
    * @return transactionLimit
    **/
   @Schema(example = "10.5", required = true, description = "")
-      @NotNull
+  @NotNull
 
-    @Valid
-    public BigDecimal getTransactionLimit() {
+  @Valid
+  public BigDecimal getTransactionLimit() {
     return transactionLimit;
   }
 
@@ -329,10 +342,10 @@ public class User   {
    * @return primaryAddress
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    @Valid
-    public Address getPrimaryAddress() {
+  @Valid
+  public Address getPrimaryAddress() {
     return primaryAddress;
   }
 
@@ -350,8 +363,8 @@ public class User   {
    * @return userRole
    **/
   @Schema(description = "")
-  
-    public UserRoleEnum getUserRole() {
+
+  public UserRoleEnum getUserRole() {
     return userRole;
   }
 
@@ -370,35 +383,35 @@ public class User   {
     }
     User user = (User) o;
     return Objects.equals(this.userID, user.userID) &&
-        Objects.equals(this.username, user.username) &&
-        Objects.equals(this.firstName, user.firstName) &&
-        Objects.equals(this.lastName, user.lastName) &&
-        Objects.equals(this.emailAddress, user.emailAddress) &&
-        Objects.equals(this.sex, user.sex) &&
-        Objects.equals(this.dateOfBirth, user.dateOfBirth) &&
-        Objects.equals(this.mobileNumber, user.mobileNumber) &&
-        Objects.equals(this.dailyLimit, user.dailyLimit) &&
-        Objects.equals(this.transactionLimit, user.transactionLimit) &&
-        Objects.equals(this.primaryAddress, user.primaryAddress) &&
-        Objects.equals(this.userRole, user.userRole);
+            Objects.equals(this.username, user.username) &&
+            Objects.equals(this.firstName, user.firstName) &&
+            Objects.equals(this.lastName, user.lastName) &&
+            Objects.equals(this.emailAddress, user.emailAddress) &&
+//        Objects.equals(this.sex, user.sex) &&
+            Objects.equals(this.dateOfBirth, user.dateOfBirth) &&
+            Objects.equals(this.mobileNumber, user.mobileNumber) &&
+            Objects.equals(this.dailyLimit, user.dailyLimit) &&
+            Objects.equals(this.transactionLimit, user.transactionLimit) &&
+            Objects.equals(this.primaryAddress, user.primaryAddress) &&
+            Objects.equals(this.userRole, user.userRole);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(userID, username, firstName, lastName, emailAddress, sex, dateOfBirth, mobileNumber, dailyLimit, transactionLimit, primaryAddress, userRole);
+    return Objects.hash(userID, username, firstName, lastName, emailAddress/*, sex*/, dateOfBirth, mobileNumber, dailyLimit, transactionLimit, primaryAddress, userRole);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class User {\n");
-    
+
     sb.append("    userID: ").append(toIndentedString(userID)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");
     sb.append("    lastName: ").append(toIndentedString(lastName)).append("\n");
     sb.append("    emailAddress: ").append(toIndentedString(emailAddress)).append("\n");
-    sb.append("    sex: ").append(toIndentedString(sex)).append("\n");
+//    sb.append("    sex: ").append(toIndentedString(sex)).append("\n");
     sb.append("    dateOfBirth: ").append(toIndentedString(dateOfBirth)).append("\n");
     sb.append("    mobileNumber: ").append(toIndentedString(mobileNumber)).append("\n");
     sb.append("    dailyLimit: ").append(toIndentedString(dailyLimit)).append("\n");

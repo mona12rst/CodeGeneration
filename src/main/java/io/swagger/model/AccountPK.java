@@ -1,9 +1,6 @@
 package io.swagger.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -13,9 +10,10 @@ import java.util.Objects;
 @NoArgsConstructor
 @Getter
 @Setter
+@EqualsAndHashCode
 public class AccountPK implements Serializable
 {
-    private IBAN IBAN;
+    private String IBAN;
     private long accountId;
 
     @Override

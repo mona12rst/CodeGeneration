@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
@@ -22,15 +23,18 @@ import java.util.Objects;
 
 @Entity
 @IdClass(AccountPK.class)
+
 public class Account implements Serializable
 {
 
     @Id
     @JsonProperty("IBAN")
-    @OneToOne
-    private IBAN IBAN = null;
+    @NotNull
+//    @OneToOne
+    private String IBAN;
 
     @Id
+    @NotNull
     @GeneratedValue
     private long accountId;
     @JsonProperty("absoluteLimit")
@@ -55,7 +59,7 @@ public class Account implements Serializable
         return accountId;
     }
 
-    public Account IBAN(IBAN IBAN)
+    public Account IBAN(String IBAN)
     {
         this.IBAN = IBAN;
         return this;
@@ -67,14 +71,13 @@ public class Account implements Serializable
      * @return IBAN
      **/
     @Schema(example = "NL02ABNA0123456789", required = true, description = "")
-    @NotNull
 
-    public IBAN getIBAN()
+    public String getIBAN()
     {
         return IBAN;
     }
 
-    public void setIBAN(IBAN IBAN)
+    public void setIBAN(String IBAN)
     {
         this.IBAN = IBAN;
     }
@@ -346,44 +349,6 @@ public class Account implements Serializable
         }
     }
 
-    /**
-     * Gets or Sets accountStatus
-     */
-    public enum AccountStatusEnum
-    {
-        ACTIVE("active"),
 
-        CLOSED("closed"),
 
-        INACTIVE("inactive"),
-
-        BLOCKED("blocked");
-
-        private String value;
-
-        AccountStatusEnum(String value)
-        {
-            this.value = value;
-        }
-
-        @JsonCreator
-        public static AccountStatusEnum fromValue(String text)
-        {
-            for (AccountStatusEnum b : AccountStatusEnum.values())
-            {
-                if (String.valueOf(b.value).equals(text))
-                {
-                    return b;
-                }
-            }
-            return null;
-        }
-
-        @Override
-        @JsonValue
-        public String toString()
-        {
-            return String.valueOf(value);
-        }
-    }
 }

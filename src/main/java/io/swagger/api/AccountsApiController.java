@@ -47,7 +47,7 @@ public class AccountsApiController implements AccountsApi
         this.request = request;
     }
 
-    
+    // should be done by accounts
 
     public ResponseEntity<Account> deleteAccount(@Parameter(in = ParameterIn.PATH, description = "Transaction id", required = true, schema = @Schema()) @PathVariable("iban") String iban)
     {
@@ -67,6 +67,8 @@ public class AccountsApiController implements AccountsApi
         return new ResponseEntity<Account>(HttpStatus.NOT_IMPLEMENTED);
     }
 
+    // should be done by transactions
+
     public ResponseEntity<Transaction> depositMoney(@Parameter(in = ParameterIn.PATH, description = "", required = true, schema = @Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody Transaction body)
     {
         String accept = request.getHeader("Accept");
@@ -84,6 +86,7 @@ public class AccountsApiController implements AccountsApi
 
         return new ResponseEntity<Transaction>(HttpStatus.NOT_IMPLEMENTED);
     }
+    // should be done by accounts
 
     public ResponseEntity<Account> editAccountByIban(@Parameter(in = ParameterIn.PATH, description = "Transaction id", required = true, schema = @Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody Account body)
     {
@@ -102,6 +105,7 @@ public class AccountsApiController implements AccountsApi
 
         return new ResponseEntity<Account>(HttpStatus.NOT_IMPLEMENTED);
     }
+    // should be done by accounts
 
     public ResponseEntity<Balance> getAccountBalance(@Parameter(in = ParameterIn.PATH, description = "iban", required = true, schema = @Schema()) @PathVariable("iban") String iban)
     {
@@ -120,6 +124,7 @@ public class AccountsApiController implements AccountsApi
 
         return new ResponseEntity<Balance>(HttpStatus.NOT_IMPLEMENTED);
     }
+    // should be done by accounts
 
     public ResponseEntity<Account> getAccountByIban(@Parameter(in = ParameterIn.PATH, description = "iban of the selected account", required = true, schema = @Schema()) @PathVariable("iban") Integer iban)
     {
@@ -138,6 +143,7 @@ public class AccountsApiController implements AccountsApi
 
         return new ResponseEntity<Account>(HttpStatus.NOT_IMPLEMENTED);
     }
+    // should be done by accounts or transactions! doesnt really matter!
 
     public ResponseEntity<Account> getAccountTransactions(@Parameter(in = ParameterIn.PATH, description = "iban", required = true, schema = @Schema()) @PathVariable("iban") String iban, @NotNull @Min(5L) @Max(50L) @Parameter(in = ParameterIn.QUERY, description = "the limit to get number of accounts", required = true, schema = @Schema(allowableValues = {}, minimum = "5", maximum = "50"
     )) @Valid @RequestParam(value = "limit", required = true) Long limit, @Min(0L) @Parameter(in = ParameterIn.QUERY, description = "the offset to start getting accounts", schema = @Schema(allowableValues = {}
@@ -158,6 +164,7 @@ public class AccountsApiController implements AccountsApi
 
         return new ResponseEntity<Account>(HttpStatus.NOT_IMPLEMENTED);
     }
+    // should be done by accounts
 
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Account>> getAllAccounts(@NotNull @Min(5L) @Max(50L) @Parameter(in = ParameterIn.QUERY, description = "the limit to get number of accounts", required = true, schema = @Schema(allowableValues = {}, minimum = "5", maximum = "50"
@@ -179,6 +186,7 @@ public class AccountsApiController implements AccountsApi
 
         return new ResponseEntity<List<Account>>(accountService.getAllAccounts(),HttpStatus.OK);
     }
+    // should be done by transactions
 
     // TODO: 6/19/2021
     @RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)

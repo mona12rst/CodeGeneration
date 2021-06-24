@@ -1,7 +1,7 @@
 package io.swagger.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.model.DTO.UserToCreate;
+import io.swagger.model.DTO.UserDTO;
 import io.swagger.model.User;
 import io.swagger.service.interfaces.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,7 +20,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.io.IOException;
 import java.util.List;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T13:48:13.918Z[GMT]")
@@ -43,7 +42,7 @@ public class UsersApiController implements UsersApi
 
 
     @RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody UserToCreate userToEdit)
+    public ResponseEntity<User> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody UserDTO userToEdit)
     {
 //        String accept = request.getHeader("Accept");
 //        if (accept != null && accept.contains("application/json"))
@@ -80,7 +79,7 @@ public class UsersApiController implements UsersApi
 
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> editUser(@Parameter(in = ParameterIn.PATH, description = "Enter userId to fetch the user detail", required = true, schema = @Schema()) @PathVariable("userId") Integer userId, @Parameter(in = ParameterIn.DEFAULT, description = "the user to be edited", required = true, schema = @Schema()) @Valid @RequestBody UserToCreate userToEdit)
+    public ResponseEntity<User> editUser(@Parameter(in = ParameterIn.PATH, description = "Enter userId to fetch the user detail", required = true, schema = @Schema()) @PathVariable("userId") Integer userId, @Parameter(in = ParameterIn.DEFAULT, description = "the user to be edited", required = true, schema = @Schema()) @Valid @RequestBody UserDTO userToEdit)
     {
 //        String accept = request.getHeader("Accept");
 //        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);

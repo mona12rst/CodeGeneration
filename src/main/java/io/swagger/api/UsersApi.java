@@ -5,9 +5,8 @@
  */
 package io.swagger.api;
 
-import io.swagger.model.Account;
 import io.swagger.model.User;
-import io.swagger.model.DTO.UserToCreate;
+import io.swagger.model.DTO.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -54,7 +53,7 @@ public interface UsersApi
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.POST)
-    ResponseEntity<User> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody UserToCreate body);
+    ResponseEntity<User> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody UserDTO body);
 
 
     @Operation(summary = "Delete user", description = "This can only be done by the logged in user as Employee or BankSuperAdmin", security = {
@@ -81,7 +80,7 @@ public interface UsersApi
     @RequestMapping(value = "/users/{userId}",
             consumes = {"application/json"},
             method = RequestMethod.PUT)
-    ResponseEntity<User> editUser(@Parameter(in = ParameterIn.PATH, description = "Enter userId to fetch the user detail", required = true, schema = @Schema()) @PathVariable("userId") Integer userId, @Parameter(in = ParameterIn.DEFAULT, description = "the user to be edited", required = true, schema = @Schema()) @Valid @RequestBody UserToCreate body);
+    ResponseEntity<User> editUser(@Parameter(in = ParameterIn.PATH, description = "Enter userId to fetch the user detail", required = true, schema = @Schema()) @PathVariable("userId") Integer userId, @Parameter(in = ParameterIn.DEFAULT, description = "the user to be edited", required = true, schema = @Schema()) @Valid @RequestBody UserDTO body);
 
 
 //    @Operation(summary = "Get accounts for a user", description = "", security = {

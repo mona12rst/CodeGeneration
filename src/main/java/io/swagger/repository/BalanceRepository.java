@@ -5,4 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface BalanceRepository extends CrudRepository<Balance, Long>
 {
+    Balance getBalanceByBalanceId(long id);
 }

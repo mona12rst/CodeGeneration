@@ -1,6 +1,6 @@
 package io.swagger.service;
 
-import io.swagger.model.DTO.UserToCreate;
+import io.swagger.model.DTO.UserDTO;
 import io.swagger.model.User;
 import io.swagger.repository.UserRepository;
 import io.swagger.service.interfaces.UserService;
@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService
 
     }
 
-    public User editUser(int id, UserToCreate user)
+    public User editUser(int id, UserDTO user)
     {
         User userToEdit = userRepository.findUserByUserID(id)
                 .dailyLimit(user.getDailyLimit())
@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .mobileNumber(user.getMobileNumber())
-                .primaryAddress(user.getPrimaryAddress())
+//                .primaryAddress(user.getPrimaryAddress())
                 .transactionLimit(user.getTransactionLimit());
         userRepository.save(userToEdit);
         return userToEdit;
@@ -44,19 +44,19 @@ public class UserServiceImpl implements UserService
 
     }
 
-    public User createUser(UserToCreate userToCreate)
+    public User createUser(UserDTO userDTO)
     {
         User user = new User()
-                .dailyLimit(userToCreate.getDailyLimit())
-                .username(userToCreate.getUsername())
-                .dateOfBirth(userToCreate.getDateOfBirth())
-                .emailAddress(userToCreate.getEmailAddress())
-                .firstName(userToCreate.getFirstName())
-                .lastName(userToCreate.getLastName())
-                .mobileNumber(userToCreate.getMobileNumber())
-                .primaryAddress(userToCreate.getPrimaryAddress())
-                .transactionLimit(userToCreate.getTransactionLimit())
-                .userRole(userToCreate.getUserRole());
+                .dailyLimit(userDTO.getDailyLimit())
+                .username(userDTO.getUsername())
+                .dateOfBirth(userDTO.getDateOfBirth())
+                .emailAddress(userDTO.getEmailAddress())
+                .firstName(userDTO.getFirstName())
+                .lastName(userDTO.getLastName())
+                .mobileNumber(userDTO.getMobileNumber())
+//                .primaryAddress(userDTO.getPrimaryAddress())
+                .transactionLimit(userDTO.getTransactionLimit())
+                .userRole(userDTO.getUserRole());
         userRepository.save(user);
         return user;
     }

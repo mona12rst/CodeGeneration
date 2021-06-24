@@ -43,7 +43,7 @@ public class TransactionsApiController implements TransactionsApi
         this.objectMapper = objectMapper;
         this.request = request;
     }
-
+    // fabio
     @RequestMapping(value = "/{iban}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Transaction>> getTransactionByIban(@Parameter(in = ParameterIn.PATH, description = "Returns all from/to transaction for this iban", required = true, schema = @Schema()) @PathVariable("iban") String iban)
     {
@@ -64,7 +64,7 @@ public class TransactionsApiController implements TransactionsApi
 
         return ResponseEntity.status(200).body(transactionService.getAllTransactionsForIban(iban));
     }
-
+    // fabio
     public ResponseEntity<Transaction> getTransactionByUserId(@Parameter(in = ParameterIn.PATH, description = "Transaction id", required = true, schema = @Schema()) @PathVariable("userId") Integer userId)
     {
         String accept = request.getHeader("Accept");
@@ -83,6 +83,7 @@ public class TransactionsApiController implements TransactionsApi
         return new ResponseEntity<Transaction>(HttpStatus.NOT_IMPLEMENTED);
     }
 
+    // mona
     public ResponseEntity<Transaction> getTransactions(@NotNull @Min(5L) @Max(50L) @Parameter(in = ParameterIn.QUERY, description = "the limit to get number of transactions", required = true, schema = @Schema(allowableValues = {}, minimum = "5", maximum = "50"
     )) @Valid @RequestParam(value = "limit", required = true) Long limit, @Min(5L) @Max(50L) @Parameter(in = ParameterIn.QUERY, description = "gets a specific transaction by id", schema = @Schema(allowableValues = {}, minimum = "5", maximum = "50"
     )) @Valid @RequestParam(value = "transactionID", required = false) Long transactionID, @Min(0L) @Parameter(in = ParameterIn.QUERY, description = "the offset to start getting users", schema = @Schema(allowableValues = {}
@@ -103,7 +104,7 @@ public class TransactionsApiController implements TransactionsApi
 
         return new ResponseEntity<Transaction>(HttpStatus.NOT_IMPLEMENTED);
     }
-
+    // mona
     public ResponseEntity<Transaction> transferMoney(@Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody TransactionDTO body)
     {
         String accept = request.getHeader("Accept");

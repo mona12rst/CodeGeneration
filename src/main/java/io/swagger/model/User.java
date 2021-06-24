@@ -28,7 +28,7 @@ public class User   {
   @Id
   @GeneratedValue
   @JsonProperty("UserID")
-  private Integer userID;
+  private long userID;
 
   @JsonProperty("Username")
   private String username;
@@ -104,13 +104,12 @@ public class User   {
    * @return userID
    **/
   @Schema(example = "1", required = true, description = "")
-  @NotNull
 
-  public Integer getUserID() {
+  public long getUserID() {
     return userID;
   }
 
-  public void setUserID(Integer userID) {
+  public void setUserID(long userID) {
     this.userID = userID;
   }
 

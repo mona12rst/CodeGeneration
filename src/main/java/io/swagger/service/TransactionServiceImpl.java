@@ -2,8 +2,10 @@ package io.swagger.service;
 
 import io.swagger.model.DTO.TransactionDTO;
 import io.swagger.model.Transaction;
+import io.swagger.model.User;
 import io.swagger.repository.TransactionRepository;
 import io.swagger.service.interfaces.TransactionService;
+import io.swagger.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.threeten.bp.LocalDateTime;
@@ -17,6 +19,9 @@ public class TransactionServiceImpl implements TransactionService
 {
     @Autowired
     private TransactionRepository transactionRepository;
+
+    @Autowired
+    UserService userService;
 
 
     public Transaction createTransaction(TransactionDTO transactionDTO)
@@ -42,4 +47,6 @@ public class TransactionServiceImpl implements TransactionService
         return transactionRepository.findAllByFromIBAN(iban);
 
     }
+
+    
 }

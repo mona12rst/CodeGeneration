@@ -15,13 +15,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Generated;
 import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T13:48:13.918Z[GMT]")
+@Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T13:48:13.918Z[GMT]")
 @RestController
 
 @RequestMapping(value = "transactions")
@@ -67,20 +68,22 @@ public class TransactionsApiController implements TransactionsApi
     // fabio
     public ResponseEntity<Transaction> getTransactionByUserId(@Parameter(in = ParameterIn.PATH, description = "Transaction id", required = true, schema = @Schema()) @PathVariable("userId") Integer userId)
     {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json"))
-        {
-            try
-            {
-                return new ResponseEntity<Transaction>(objectMapper.readValue("{\n  \"TransactionType\" : \"transfer\",\n  \"userPerforming\" : {\n    \"firstName\" : \"john\",\n    \"lastName\" : \"doe\",\n    \"emailAddress\" : \"john@example.com\",\n    \"Username\" : \"john\",\n    \"UserID\" : 1,\n    \"mobileNumber\" : \"0753846288\",\n    \"sex\" : \"male\",\n    \"dailyLimit\" : 10.5,\n    \"dateOfBirth\" : \"15-01-1996\",\n    \"transactionLimit\" : 10.5,\n    \"primaryAddress\" : {\n      \"country\" : \"country\",\n      \"city\" : \"city\",\n      \"street\" : \"street\",\n      \"houseNumber\" : 0,\n      \"postCode\" : \"postCode\"\n    },\n    \"userRole\" : \"customer\"\n  },\n  \"FromIBAN\" : \"NL01ING09874374839\",\n  \"ToIBAN\" : \"NL01ING09874374839\",\n  \"Amount\" : 801.7481,\n  \"Date\" : \"2000-01-23\",\n  \"TransactionID\" : \"TransactionID\"\n}", Transaction.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e)
-            {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Transaction>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+//        String accept = request.getHeader("Accept");
+//        if (accept != null && accept.contains("application/json"))
+//        {
+//            try
+//            {
+//                return new ResponseEntity<Transaction>(objectMapper.readValue("{\n  \"TransactionType\" : \"transfer\",\n  \"userPerforming\" : {\n    \"firstName\" : \"john\",\n    \"lastName\" : \"doe\",\n    \"emailAddress\" : \"john@example.com\",\n    \"Username\" : \"john\",\n    \"UserID\" : 1,\n    \"mobileNumber\" : \"0753846288\",\n    \"sex\" : \"male\",\n    \"dailyLimit\" : 10.5,\n    \"dateOfBirth\" : \"15-01-1996\",\n    \"transactionLimit\" : 10.5,\n    \"primaryAddress\" : {\n      \"country\" : \"country\",\n      \"city\" : \"city\",\n      \"street\" : \"street\",\n      \"houseNumber\" : 0,\n      \"postCode\" : \"postCode\"\n    },\n    \"userRole\" : \"customer\"\n  },\n  \"FromIBAN\" : \"NL01ING09874374839\",\n  \"ToIBAN\" : \"NL01ING09874374839\",\n  \"Amount\" : 801.7481,\n  \"Date\" : \"2000-01-23\",\n  \"TransactionID\" : \"TransactionID\"\n}", Transaction.class), HttpStatus.NOT_IMPLEMENTED);
+//            } catch (IOException e)
+//            {
+//                log.error("Couldn't serialize response for content type application/json", e);
+//                return new ResponseEntity<Transaction>(HttpStatus.INTERNAL_SERVER_ERROR);
+//            }
+//        }
+//
+//        return new ResponseEntity<Transaction>(HttpStatus.NOT_IMPLEMENTED);
 
-        return new ResponseEntity<Transaction>(HttpStatus.NOT_IMPLEMENTED);
+
     }
 
     // mona

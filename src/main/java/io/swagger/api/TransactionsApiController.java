@@ -66,7 +66,8 @@ public class TransactionsApiController implements TransactionsApi
         return ResponseEntity.status(200).body(transactionService.getAllTransactionsForIban(iban));
     }
     // fabio
-    public ResponseEntity<Transaction> getTransactionByUserId(@Parameter(in = ParameterIn.PATH, description = "Transaction id", required = true, schema = @Schema()) @PathVariable("userId") Integer userId)
+    @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Transaction>> getTransactionByUserId(@Parameter(in = ParameterIn.PATH, description = "Transaction id", required = true, schema = @Schema()) @PathVariable("userId") Integer userId)
     {
 //        String accept = request.getHeader("Accept");
 //        if (accept != null && accept.contains("application/json"))
@@ -83,7 +84,7 @@ public class TransactionsApiController implements TransactionsApi
 //
 //        return new ResponseEntity<Transaction>(HttpStatus.NOT_IMPLEMENTED);
 
-
+        return ResponseEntity.status(200).body(transactionService.getTransactionsForUser(userId));
     }
 
     // mona

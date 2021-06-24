@@ -50,9 +50,9 @@ public class TransactionServiceImpl implements TransactionService
 
 
 
-    public List<Transaction> getTransactionsForUser(User user)
+    public List<Transaction> getTransactionsForUser(long userId)
     {
-        User userToFind = userService.getUserById(user.getUserID());
+        User userToFind = userService.getUserById(userId);
         return transactionRepository.findAllByUserPerforming(userToFind);
 
     }

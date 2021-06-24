@@ -10,9 +10,7 @@ public interface TransactionService
 {
     Transaction createTransaction(TransactionDTO transactionDTO);
     List<Transaction> getAllTransactionsForIban(String iban);
-    List<Transaction> getTransactionsForUser(User user);
-<<<<<<< Updated upstream
+    List<Transaction> getTransactionsForUser(long userId);
+
 }
-=======
-}
->>>>>>> Stashed changes
+

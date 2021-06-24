@@ -47,15 +47,14 @@ public class TransactionServiceImpl implements TransactionService
         return transactionRepository.findAllByFromIBAN(iban);
 
     }
-<<<<<<< Updated upstream
 
-    
-=======
+
+
     public List<Transaction> getTransactionsForUser(User user)
     {
         User userToFind = userService.getUserById(user.getUserID());
         return transactionRepository.findAllByUserPerforming(userToFind);
 
     }
->>>>>>> Stashed changes
+
 }

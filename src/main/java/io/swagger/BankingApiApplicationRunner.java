@@ -2,6 +2,9 @@ package io.swagger;
 
 
 import io.swagger.model.*;
+import io.swagger.model.DTO.TransactionDTO;
+import io.swagger.model.enums.AccountStatusEnum;
+import io.swagger.model.enums.TransactionTypeEnum;
 import io.swagger.repository.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Component
 @Log
@@ -24,11 +28,13 @@ public class BankingApiApplicationRunner implements ApplicationRunner
     private BalanceRepository balanceRepository;
     @Autowired
     private UserRepository userRepository;
-//    @Autowired
-//    private AddressRepository addressRepository;
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     @Autowired
     private AccountRepository accountRepository;
+
+
 
     public void run(ApplicationArguments args) throws Exception
     {
@@ -67,6 +73,7 @@ public class BankingApiApplicationRunner implements ApplicationRunner
 
         userRepository.save(user1);
 
+        // account 1
 
         IBAN iban = new IBAN();
         iban.setCountryCode("NL");
@@ -75,18 +82,18 @@ public class BankingApiApplicationRunner implements ApplicationRunner
         iban.setAccountNumber(123456078);
 
 
-//        ibanRepository.save(iban);
+        ibanRepository.save(iban);
 
-        Balance balane = new Balance().amount(BigDecimal.valueOf(675));
+        Balance balance = new Balance().amount(BigDecimal.valueOf(675));
 
-        balanceRepository.save(balane);
+        balanceRepository.save(balance);
 
         Account account1 = new Account().accountStatus(AccountStatusEnum.ACTIVE)
                 .accountType(Account.AccountTypeEnum.CURRENT)
                 .IBAN(iban.toString())
 
                 .absoluteLimit(BigDecimal.valueOf(200))
-                .balance(balane)
+                .balance(balance)
                 .dailyLimit(BigDecimal.valueOf(200))
                 .dateOfOpening("some date")
                 .user(user1);
@@ -94,6 +101,50 @@ public class BankingApiApplicationRunner implements ApplicationRunner
         accountRepository.save(account1);
         System.out.println(account1);
 
+
+        // account 2
+        IBAN iban2 = new IBAN();
+        iban2.setCountryCode("NL");
+        iban2.setCheckNumber(23);
+        iban2.setBankIdentifier("ABN");
+        iban2.setAccountNumber(252365048);
+
+
+        ibanRepository.save(iban2);
+
+        Balance balance2 = new Balance().amount(BigDecimal.valueOf(955));
+
+        balanceRepository.save(balance2);
+
+        Account account2 = new Account().accountStatus(AccountStatusEnum.ACTIVE)
+                .accountType(Account.AccountTypeEnum.CURRENT)
+                .IBAN(iban2.toString())
+
+                .absoluteLimit(BigDecimal.valueOf(180))
+                .balance(balance2)
+                .dailyLimit(BigDecimal.valueOf(100))
+                .dateOfOpening("24-06-2021")
+                .user(user2);
+//        account1.setAccountId(1);
+        accountRepository.save(account2);
+        System.out.println(account2);
+
+
+        // create a dummy transaction as data seed
+        Transaction transactionDTO = new Transaction().transactionType(TransactionTypeEnum.TRANSFER)
+                .amount(200.50f)
+                .fromIBAN(account1.getIBAN())
+                .toIBAN(account2.getIBAN())
+                .userPerforming(user1);
+
+
+       transactionRepository.save(transactionDTO);
+
+
+    }
+
+    public void editor()
+    {
 
     }
 

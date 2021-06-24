@@ -2,6 +2,7 @@ package io.swagger.repository;
 
 import io.swagger.model.Account;
 import io.swagger.model.AccountPK;
+import io.swagger.model.Balance;
 import io.swagger.model.IBAN;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -10,5 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface AccountRepository extends CrudRepository<Account, AccountPK>
 {
     Account findAccountByIBAN(String iban);
+    int deleteAccountByIBAN(String iban);
+
 
 }

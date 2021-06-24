@@ -7,8 +7,11 @@ package io.swagger.api;
 
 import io.swagger.model.Account;
 import io.swagger.model.Balance;
+import io.swagger.model.DTO.AccountDTO;
 import io.swagger.model.DTO.TransactionDTO;
+import io.swagger.model.DTO.UserDTO;
 import io.swagger.model.Transaction;
+import io.swagger.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -32,6 +35,31 @@ import java.util.List;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T13:48:13.918Z[GMT]")
 @Validated
 public interface AccountsApi {
+
+
+    @Operation(summary = "Creates an account.", description = "creates a new account can only be done by an employee", security = {
+            @SecurityRequirement(name = "bearerAuth")}, tags = {"Accounts"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Account created", content = @Content(schema = @Schema(implementation = Account.class))),
+
+            @ApiResponse(responseCode = "201", description = "Created", content = @Content(schema = @Schema(implementation = Account.class))),
+
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+
+            @ApiResponse(responseCode = "403", description = "Forbidden, you do not have access rights"),
+
+            @ApiResponse(responseCode = "404", description = "Not found"),
+
+            @ApiResponse(responseCode = "409", description = "Conflict"),
+
+            @ApiResponse(responseCode = "500", description = "Oops, something went wrong on the server.")})
+    @RequestMapping(value = "/accounts",
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.POST)
+    ResponseEntity<Account> createAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody AccountDTO accountDTO);
+
+
 
     @Operation(summary = "delets an account", description = "deletes an account", security = {
         @SecurityRequirement(name = "bearerAuth")    }, tags={ "Accounts" })
@@ -74,7 +102,7 @@ public interface AccountsApi {
         produces = { "application/json" }, 
         consumes = { "application/json" }, 
         method = RequestMethod.PUT)
-    ResponseEntity<Account> editAccountByIban(@Parameter(in = ParameterIn.PATH, description = "Transaction id", required=true, schema=@Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody Account body);
+    ResponseEntity<Account> editAccountByIban(@Parameter(in = ParameterIn.PATH, description = "Transaction id", required=true, schema=@Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody AccountDTO accountDTO);
 
 
     @Operation(summary = "gets balance for a specific account", description = "gets balance", security = {
@@ -94,7 +122,7 @@ public interface AccountsApi {
     @RequestMapping(value = "/Accounts/{iban}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<Account> getAccountByIban(@Parameter(in = ParameterIn.PATH, description = "iban of the selected account", required=true, schema=@Schema()) @PathVariable("iban") Integer iban);
+    ResponseEntity<Account> getAccountByIban(@Parameter(in = ParameterIn.PATH, description = "iban of the selected account", required=true, schema=@Schema()) @PathVariable("iban") String iban);
 
 
     @Operation(summary = "gets transactions for account", description = "gets transactions for account", security = {

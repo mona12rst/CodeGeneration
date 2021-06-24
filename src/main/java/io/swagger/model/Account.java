@@ -4,8 +4,8 @@ package io.swagger.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.model.enums.AccountStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;

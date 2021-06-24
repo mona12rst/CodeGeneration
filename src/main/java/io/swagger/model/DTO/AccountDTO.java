@@ -1,11 +1,11 @@
 
 package io.swagger.model.DTO;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.model.*;
+import io.swagger.model.enums.AccountStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.OneToOne;
@@ -17,6 +17,7 @@ import java.util.Objects;
 
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T13:48:13.918Z[GMT]")
+@Builder
 public class AccountDTO
 {
     @JsonProperty("absoluteLimit")

@@ -4,12 +4,11 @@ import java.util.Objects;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.model.User;
+import io.swagger.model.enums.TransactionTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.threeten.bp.LocalDate;
 import org.springframework.validation.annotation.Validated;
+import org.threeten.bp.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,7 +24,8 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T13:48:13.918Z[GMT]")
 
 @Entity
-public class Transaction   {
+public class Transaction
+{
   @Id
   @GeneratedValue
   @JsonProperty("TransactionID")
@@ -43,40 +43,12 @@ public class Transaction   {
   /**
    * Type of transaction
    */
-  public enum TransactionTypeEnum {
-    TRANSFER("transfer"),
-    
-    DEPOSIT("deposit"),
-    
-    WITHDRAW("withdraw");
 
-    private String value;
-
-    TransactionTypeEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static TransactionTypeEnum fromValue(String text) {
-      for (TransactionTypeEnum b : TransactionTypeEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
   @JsonProperty("TransactionType")
   private TransactionTypeEnum transactionType;
 
   @JsonProperty("Date")
-  private LocalDate date;
+  private LocalDateTime date;
 
   @OneToOne
   @JsonProperty("userPerforming")
@@ -183,7 +155,7 @@ public class Transaction   {
     this.transactionType = transactionType;
   }
 
-  public Transaction date(LocalDate date) {
+  public Transaction date(LocalDateTime date) {
     this.date = date;
     return this;
   }
@@ -193,14 +165,12 @@ public class Transaction   {
    * @return date
    **/
   @Schema(required = true, description = "")
-      @NotNull
 
-    @Valid
-    public LocalDate getDate() {
+  public LocalDateTime getDate() {
     return date;
   }
 
-  public void setDate(LocalDate date) {
+  public void setDate(LocalDateTime date) {
     this.date = date;
   }
 

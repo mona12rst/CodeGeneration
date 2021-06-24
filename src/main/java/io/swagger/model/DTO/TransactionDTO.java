@@ -2,9 +2,8 @@ package io.swagger.model.DTO;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.model.User;
+import io.swagger.model.enums.TransactionTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -17,7 +16,8 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T13:48:13.918Z[GMT]")
 
 
-public class TransactionDTO   {
+public class TransactionDTO
+{
   @JsonProperty("FromIBAN")
   private String fromIBAN = null;
 
@@ -27,38 +27,7 @@ public class TransactionDTO   {
   @JsonProperty("Amount")
   private Float amount = null;
 
-  /**
-   * Type of transaction
-   */
-  public enum TransactionTypeEnum {
-    TRANSACTION("transaction"),
-    
-    DEPOSIT("deposit"),
-    
-    WITHDRAWAL("withdrawal");
 
-    private String value;
-
-    TransactionTypeEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static TransactionTypeEnum fromValue(String text) {
-      for (TransactionTypeEnum b : TransactionTypeEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
   @JsonProperty("TransactionType")
   private TransactionTypeEnum transactionType = null;
 

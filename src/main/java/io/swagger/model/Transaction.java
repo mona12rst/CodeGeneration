@@ -223,7 +223,7 @@ public class Transaction
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Transaction {\n");
-    
+
     sb.append("    transactionID: ").append(toIndentedString(transactionID)).append("\n");
     sb.append("    fromIBAN: ").append(toIndentedString(fromIBAN)).append("\n");
     sb.append("    toIBAN: ").append(toIndentedString(toIBAN)).append("\n");

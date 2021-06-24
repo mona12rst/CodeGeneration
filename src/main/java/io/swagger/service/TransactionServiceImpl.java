@@ -55,6 +55,7 @@ public class TransactionServiceImpl implements TransactionService
         User userToFind = userService.getUserById(userId);
         return transactionRepository.findAllByUserPerforming(userToFind);
 
+
     }
 
 }

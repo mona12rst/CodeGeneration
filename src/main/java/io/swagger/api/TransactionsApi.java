@@ -51,7 +51,7 @@ public interface TransactionsApi {
     @RequestMapping(value = "/transactions/{iban}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<List<Transaction>> getTransactionByIban(@Parameter(in = ParameterIn.PATH, description = "Returns all from/to transaction for this iban", required=true, schema=@Schema()) @PathVariable("iban") Integer iban);
+    ResponseEntity<List<Transaction>> getTransactionByIban(@Parameter(in = ParameterIn.PATH, description = "Returns all from/to transaction for this iban", required=true, schema=@Schema()) @PathVariable("iban") String iban);
 
 
     @Operation(summary = "Returns the specified transaction by transactionID", description = "Returns the specified transaction", security = {

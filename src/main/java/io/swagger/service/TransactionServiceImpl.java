@@ -25,15 +25,21 @@ public class TransactionServiceImpl implements TransactionService
                 .amount(transactionDTO.getAmount())
                 .date(LocalDateTime.now())
                 .fromIBAN(transactionDTO.getFromIBAN())
-                .toIBAN(transactionDTO.getToIBAN()).userPerforming(transactionDTO.getUserPerforming());
+                .toIBAN(transactionDTO.getToIBAN())
+                .userPerforming(transactionDTO.getUserPerforming());
 
 
-                        transactionRepository.save(transaction);
+        transactionRepository.save(transaction);
         return transaction;
 //        return null;
     }
-    public List<Transaction> getAllTransactions()
+
+
+    public List<Transaction> getAllTransactionsForIban(String iban)
     {
-        return (List<Transaction>) transactionRepository.findAll();
+        System.out.println("hi");
+        transactionRepository.findAllByFromIBAN(iban).forEach(System.out::println);
+        return transactionRepository.findAllByFromIBAN(iban);
+
     }
 }

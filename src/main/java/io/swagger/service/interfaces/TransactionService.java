@@ -8,5 +8,5 @@ import java.util.List;
 public interface TransactionService
 {
     Transaction createTransaction(TransactionDTO transactionDTO);
-    List<Transaction> getAllTransactions();
+    List<Transaction> getAllTransactionsForIban(String iban);
 }

@@ -11,4 +11,8 @@ public interface TransactionService
     Transaction createTransaction(TransactionDTO transactionDTO);
     List<Transaction> getAllTransactionsForIban(String iban);
     List<Transaction> getTransactionsForUser(User user);
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes

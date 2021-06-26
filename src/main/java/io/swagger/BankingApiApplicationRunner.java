@@ -84,7 +84,7 @@ public class BankingApiApplicationRunner implements ApplicationRunner
 
         ibanRepository.save(iban);
 
-        Balance balance = new Balance().amount(BigDecimal.valueOf(675));
+        Balance balance = new Balance().amount(675);
 
         balanceRepository.save(balance);
 
@@ -92,9 +92,9 @@ public class BankingApiApplicationRunner implements ApplicationRunner
                 .accountType(Account.AccountTypeEnum.CURRENT)
                 .IBAN(iban.toString())
 
-                .absoluteLimit(BigDecimal.valueOf(200))
+                .absoluteLimit(200)
                 .balance(balance)
-                .dailyLimit(BigDecimal.valueOf(200))
+                .dailyLimit(200)
                 .dateOfOpening("some date")
                 .user(user1);
 //        account1.setAccountId(1);
@@ -112,7 +112,7 @@ public class BankingApiApplicationRunner implements ApplicationRunner
 
         ibanRepository.save(iban2);
 
-        Balance balance2 = new Balance().amount(BigDecimal.valueOf(955));
+        Balance balance2 = new Balance().amount(955);
 
         balanceRepository.save(balance2);
 
@@ -120,9 +120,9 @@ public class BankingApiApplicationRunner implements ApplicationRunner
                 .accountType(Account.AccountTypeEnum.CURRENT)
                 .IBAN(iban2.toString())
 
-                .absoluteLimit(BigDecimal.valueOf(180))
+                .absoluteLimit(180)
                 .balance(balance2)
-                .dailyLimit(BigDecimal.valueOf(100))
+                .dailyLimit(200)
                 .dateOfOpening("24-06-2021")
                 .user(user2);
 //        account1.setAccountId(1);

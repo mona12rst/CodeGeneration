@@ -76,29 +76,29 @@ public interface TransactionsApi {
     ResponseEntity<List<Transaction>> getTransactionByUserId(@Parameter(in = ParameterIn.PATH, description = "Transaction id", required=true, schema=@Schema()) @PathVariable("userId") Integer userId);
 
 
-    @Operation(summary = "gets all of the transactions", description = "get transactions", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "Transaction" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "Transaction created", content = @Content(schema = @Schema(implementation = Transaction.class))),
-        
-        @ApiResponse(responseCode = "201", description = "Created"),
-        
-        @ApiResponse(responseCode = "400", description = "Invalid input"),
-        
-        @ApiResponse(responseCode = "403", description = "Forbidden, you do not have access rights"),
-        
-        @ApiResponse(responseCode = "404", description = "Not found"),
-        
-        @ApiResponse(responseCode = "409", description = "Conflict"),
-        
-        @ApiResponse(responseCode = "500", description = "Oops, something went wrong on the server.") })
-    @RequestMapping(value = "/transactions",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
-    ResponseEntity<Transaction> getTransactions(@NotNull @Min(5L) @Max(50L) @Parameter(in = ParameterIn.QUERY, description = "the limit to get number of transactions" ,required=true,schema=@Schema(allowableValues={  }, minimum="5", maximum="50"
-)) @Valid @RequestParam(value = "limit", required = true) Long limit, @Min(5L) @Max(50L) @Parameter(in = ParameterIn.QUERY, description = "gets a specific transaction by id" ,schema=@Schema(allowableValues={  }, minimum="5", maximum="50"
-)) @Valid @RequestParam(value = "transactionID", required = false) Long transactionID, @Min(0L)@Parameter(in = ParameterIn.QUERY, description = "the offset to start getting users" ,schema=@Schema(allowableValues={  }
-)) @Valid @RequestParam(value = "offset", required = false) Long offset, @Parameter(in = ParameterIn.QUERY, description = "get transactions for the specific day" ,schema=@Schema()) @Valid @RequestParam(value = "day", required = false) String day, @Parameter(in = ParameterIn.QUERY, description = "get transactions between two dates" ,schema=@Schema()) @Valid @RequestParam(value = "betweenDates", required = false) String betweenDates, @Parameter(in = ParameterIn.QUERY, description = "the from iban to get the transactions for" ,schema=@Schema()) @Valid @RequestParam(value = "fromIban", required = false) String fromIban, @Parameter(in = ParameterIn.QUERY, description = "the to iban to get the transactions for" ,schema=@Schema()) @Valid @RequestParam(value = "toIban", required = false) String toIban);
+//    @Operation(summary = "gets all of the transactions", description = "get transactions", security = {
+//        @SecurityRequirement(name = "bearerAuth")    }, tags={ "Transaction" })
+//    @ApiResponses(value = {
+//        @ApiResponse(responseCode = "200", description = "Transaction created", content = @Content(schema = @Schema(implementation = Transaction.class))),
+//
+//        @ApiResponse(responseCode = "201", description = "Created"),
+//
+//        @ApiResponse(responseCode = "400", description = "Invalid input"),
+//
+//        @ApiResponse(responseCode = "403", description = "Forbidden, you do not have access rights"),
+//
+//        @ApiResponse(responseCode = "404", description = "Not found"),
+//
+//        @ApiResponse(responseCode = "409", description = "Conflict"),
+//
+//        @ApiResponse(responseCode = "500", description = "Oops, something went wrong on the server.") })
+//    @RequestMapping(value = "/transactions",
+//        produces = { "application/json" },
+//        method = RequestMethod.GET)
+//    ResponseEntity<Transaction> getTransactions(@NotNull @Min(5L) @Max(50L) @Parameter(in = ParameterIn.QUERY, description = "the limit to get number of transactions" ,required=true,schema=@Schema(allowableValues={  }, minimum="5", maximum="50"
+//)) @Valid @RequestParam(value = "limit", required = true) Long limit, @Min(5L) @Max(50L) @Parameter(in = ParameterIn.QUERY, description = "gets a specific transaction by id" ,schema=@Schema(allowableValues={  }, minimum="5", maximum="50"
+//)) @Valid @RequestParam(value = "transactionID", required = false) Long transactionID, @Min(0L)@Parameter(in = ParameterIn.QUERY, description = "the offset to start getting users" ,schema=@Schema(allowableValues={  }
+//)) @Valid @RequestParam(value = "offset", required = false) Long offset, @Parameter(in = ParameterIn.QUERY, description = "get transactions for the specific day" ,schema=@Schema()) @Valid @RequestParam(value = "day", required = false) String day, @Parameter(in = ParameterIn.QUERY, description = "get transactions between two dates" ,schema=@Schema()) @Valid @RequestParam(value = "betweenDates", required = false) String betweenDates, @Parameter(in = ParameterIn.QUERY, description = "the from iban to get the transactions for" ,schema=@Schema()) @Valid @RequestParam(value = "fromIban", required = false) String fromIban, @Parameter(in = ParameterIn.QUERY, description = "the to iban to get the transactions for" ,schema=@Schema()) @Valid @RequestParam(value = "toIban", required = false) String toIban);
 
 
     @Operation(summary = "transfer money to another account", description = "Initiate a payment process.", security = {

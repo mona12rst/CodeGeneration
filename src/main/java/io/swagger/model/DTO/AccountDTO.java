@@ -21,9 +21,9 @@ import java.util.Objects;
 public class AccountDTO
 {
     @JsonProperty("absoluteLimit")
-    private BigDecimal absoluteLimit = null;
+    private double absoluteLimit;
     @JsonProperty("dailyLimit")
-    private BigDecimal dailyLimit = null;
+    private double dailyLimit;
     @OneToOne
     @JsonProperty("balance")
     private Balance balance = null;
@@ -39,7 +39,7 @@ public class AccountDTO
 
 
 
-    public AccountDTO absoluteLimit(BigDecimal absoluteLimit)
+    public AccountDTO absoluteLimit(double absoluteLimit)
     {
         this.absoluteLimit = absoluteLimit;
         return this;
@@ -51,20 +51,18 @@ public class AccountDTO
      * @return absoluteLimit
      **/
     @Schema(example = "10.5", required = true, description = "")
-    @NotNull
 
-    @Valid
-    public BigDecimal getAbsoluteLimit()
+    public double getAbsoluteLimit()
     {
         return absoluteLimit;
     }
 
-    public void setAbsoluteLimit(BigDecimal absoluteLimit)
+    public void setAbsoluteLimit(double absoluteLimit)
     {
         this.absoluteLimit = absoluteLimit;
     }
 
-    public AccountDTO dailyLimit(BigDecimal dailyLimit)
+    public AccountDTO dailyLimit(double dailyLimit)
     {
         this.dailyLimit = dailyLimit;
         return this;
@@ -77,13 +75,12 @@ public class AccountDTO
      **/
     @Schema(example = "10.5", description = "")
 
-    @Valid
-    public BigDecimal getDailyLimit()
+    public double getDailyLimit()
     {
         return dailyLimit;
     }
 
-    public void setDailyLimit(BigDecimal dailyLimit)
+    public void setDailyLimit(double dailyLimit)
     {
         this.dailyLimit = dailyLimit;
     }

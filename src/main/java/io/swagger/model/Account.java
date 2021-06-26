@@ -39,9 +39,9 @@ public class Account implements Serializable
     @GeneratedValue
     private long accountId;
     @JsonProperty("absoluteLimit")
-    private BigDecimal absoluteLimit = null;
+    private double absoluteLimit;
     @JsonProperty("dailyLimit")
-    private BigDecimal dailyLimit = null;
+    private double dailyLimit;
     @OneToOne
     @JsonProperty("balance")
     private Balance balance = null;
@@ -83,7 +83,7 @@ public class Account implements Serializable
         this.IBAN = IBAN;
     }
 
-    public Account absoluteLimit(BigDecimal absoluteLimit)
+    public Account absoluteLimit(double absoluteLimit)
     {
         this.absoluteLimit = absoluteLimit;
         return this;
@@ -95,20 +95,18 @@ public class Account implements Serializable
      * @return absoluteLimit
      **/
     @Schema(example = "10.5", required = true, description = "")
-    @NotNull
 
-    @Valid
-    public BigDecimal getAbsoluteLimit()
+    public double getAbsoluteLimit()
     {
         return absoluteLimit;
     }
 
-    public void setAbsoluteLimit(BigDecimal absoluteLimit)
+    public void setAbsoluteLimit(double absoluteLimit)
     {
         this.absoluteLimit = absoluteLimit;
     }
 
-    public Account dailyLimit(BigDecimal dailyLimit)
+    public Account dailyLimit(double dailyLimit)
     {
         this.dailyLimit = dailyLimit;
         return this;
@@ -126,13 +124,12 @@ public class Account implements Serializable
      **/
     @Schema(example = "10.5", description = "")
 
-    @Valid
-    public BigDecimal getDailyLimit()
+    public double getDailyLimit()
     {
         return dailyLimit;
     }
 
-    public void setDailyLimit(BigDecimal dailyLimit)
+    public void setDailyLimit(double dailyLimit)
     {
         this.dailyLimit = dailyLimit;
     }

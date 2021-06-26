@@ -11,6 +11,8 @@ public interface TransactionService
     Transaction createTransaction(TransactionDTO transactionDTO);
     List<Transaction> getAllTransactionsForIban(String iban);
     List<Transaction> getTransactionsForUser(long userId);
+    public Transaction transferMoney(TransactionDTO transactionDTO);
+
 
 }
 

@@ -36,9 +36,9 @@ public class Balance
     }
 
     @JsonProperty("amount")
-    private BigDecimal amount = null;
+    private double amount;
 
-    public Balance amount(BigDecimal amount)
+    public Balance amount(double amount)
     {
         this.amount = amount;
         return this;
@@ -50,15 +50,13 @@ public class Balance
      * @return amount
      **/
     @Schema(example = "10.5", required = true, description = "")
-    @NotNull
 
-    @Valid
-    public BigDecimal getAmount()
+    public double getAmount()
     {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount)
+    public void setAmount(double amount)
     {
         this.amount = amount;
     }

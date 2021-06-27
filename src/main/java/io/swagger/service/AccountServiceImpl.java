@@ -1,12 +1,10 @@
 
 package io.swagger.service;
 
-import io.swagger.model.Account;
-import io.swagger.model.Balance;
+import io.swagger.exception.IncorrectIBANException;
+import io.swagger.exception.InvalidAccountException;
+import io.swagger.model.*;
 import io.swagger.model.DTO.AccountDTO;
-import io.swagger.model.DTO.TransactionDTO;
-import io.swagger.model.IBAN;
-import io.swagger.model.User;
 import io.swagger.repository.AccountRepository;
 import io.swagger.repository.BalanceRepository;
 import io.swagger.repository.IBANRepository;
@@ -40,19 +38,16 @@ public class AccountServiceImpl implements AccountService
         return (List<Account>) accountRepository.findAll();
     }
 
-    public Account withdrawMoney(String iban, TransactionDTO transactionDTO)
-    {
-        return null;
 
-    }
-
-    public Account createAccount(AccountDTO accountDTO)
+    public Account createAccount(AccountDTO accountDTO) throws Exception
     {
         IBAN iban = new IBAN();
         iban.setCountryCode("NL");
         iban.setCheckNumber(47);
         iban.setBankIdentifier("INGB");
         iban.setAccountNumber(123456089);
+
+        IBANHelper.validate(iban.toString());
 
         ibanRepository.save(iban);
         System.out.println(iban);
@@ -64,7 +59,7 @@ public class AccountServiceImpl implements AccountService
         Account account = new Account().dateOfOpening(accountDTO.getDateOfOpening())
                 .accountType(accountDTO.getAccountType())
                 .accountStatus(accountDTO.getAccountStatus())
-                .dailyLimit(accountDTO.getDailyLimit())
+//                .dailyLimit(accountDTO.getDailyLimit())
                 .absoluteLimit(accountDTO.getAbsoluteLimit())
                 .balance(balance)
                 .IBAN(iban.toString())
@@ -78,6 +73,7 @@ public class AccountServiceImpl implements AccountService
 
     public Account getAccountByIban(String iban)
     {
+
         return accountRepository.findAccountByIBAN(iban);
     }
 
@@ -89,7 +85,7 @@ public class AccountServiceImpl implements AccountService
     }
 
     // this method will not change the user of the account
-    public Account editAccountByAccountByIban(String iban, AccountDTO accountDTO)
+    public Account editAccountByAccountByIban(String iban, AccountDTO accountDTO) throws Exception
     {
         // changing the balance object
         Balance balance = balanceRepository.getBalanceByBalanceId(accountDTO.getBalance().getBalanceId());
@@ -100,7 +96,7 @@ public class AccountServiceImpl implements AccountService
         account.setAccountStatus(accountDTO.getAccountStatus());
         account.setAccountType(accountDTO.getAccountType());
         account.setBalance(balance);
-        account.setDailyLimit(accountDTO.getDailyLimit());
+//        account.setDailyLimit(accountDTO.getDailyLimit());
         account.setAbsoluteLimit(accountDTO.getAbsoluteLimit());
         // this should not really be an option
 //        account.setDateOfOpening(accountDTO.getDateOfOpening());

@@ -1,12 +1,16 @@
 package io.swagger.api;
 
+import io.swagger.exception.IncorrectIBANException;
+import io.swagger.exception.InvalidAccountException;
 import io.swagger.model.Account;
 import io.swagger.model.Balance;
 import io.swagger.model.DTO.AccountDTO;
+import io.swagger.model.errorDTO.ErroredTransaction;
 import io.swagger.model.DTO.TransactionDTO;
 import io.swagger.model.Transaction;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.service.interfaces.AccountService;
+import io.swagger.service.interfaces.TransactionService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.List;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T13:48:13.918Z[GMT]")
@@ -41,7 +44,10 @@ public class AccountsApiController implements AccountsApi
     @Autowired
     private AccountService accountService;
 
-    @org.springframework.beans.factory.annotation.Autowired
+    @Autowired
+    private TransactionService transactionService;
+
+    @Autowired
     public AccountsApiController(ObjectMapper objectMapper, HttpServletRequest request)
     {
         this.objectMapper = objectMapper;
@@ -52,187 +58,99 @@ public class AccountsApiController implements AccountsApi
     // TODO: 6/24/2021 security and error handling
 
     @RequestMapping(value = "", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Account> createAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody AccountDTO accountDTO)
+    public ResponseEntity<Account> createAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody AccountDTO accountDTO) throws Exception
     {
-        return ResponseEntity.status(201).body(accountService.createAccount(accountDTO));
+        return ResponseEntity.status(201)
+                .body(accountService.createAccount(accountDTO));
     }
+
     @RequestMapping(value = "/{iban}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Account> deleteAccount(@Parameter(in = ParameterIn.PATH, description = "Transaction id", required = true, schema = @Schema()) @PathVariable("iban") String iban)
+    public ResponseEntity<Account> deleteAccount(@Parameter(in = ParameterIn.PATH, description = "iban", required = true, schema = @Schema()) @PathVariable("iban") String iban)
     {
-//        String accept = request.getHeader("Accept");
-//        if (accept != null && accept.contains("application/json"))
+
+        return new ResponseEntity<Account>(HttpStatus.NO_CONTENT);
+
+//        int rows = accountService.deleteAccountByIban(iban);
+//        if (rows == 1)
 //        {
-//            try
-//            {
-//                return new ResponseEntity<Account>(objectMapper.readValue("{\n  \"accountStatus\" : \"active\",\n  \"IBAN\" : \"NL02ABNA0123456789\",\n  \"absoluteLimit\" : 10.5,\n  \"balance\" : {\n    \"amount\" : 10.5\n  },\n  \"dailyLimit\" : 10.5,\n  \"accountType\" : \"savings\",\n  \"user\" : {\n    \"firstName\" : \"john\",\n    \"lastName\" : \"doe\",\n    \"emailAddress\" : \"john@example.com\",\n    \"Username\" : \"john\",\n    \"UserID\" : 1,\n    \"mobileNumber\" : \"0753846288\",\n    \"sex\" : \"male\",\n    \"dailyLimit\" : 10.5,\n    \"dateOfBirth\" : \"15-01-1996\",\n    \"transactionLimit\" : 10.5,\n    \"primaryAddress\" : {\n      \"country\" : \"country\",\n      \"city\" : \"city\",\n      \"street\" : \"street\",\n      \"houseNumber\" : 0,\n      \"postCode\" : \"postCode\"\n    },\n    \"userRole\" : \"customer\"\n  },\n  \"dateOfOpening\" : \"05-05-2020\"\n}", Account.class), HttpStatus.NOT_IMPLEMENTED);
-//            } catch (IOException e)
-//            {
-//                log.error("Couldn't serialize response for content type application/json", e);
-//                return new ResponseEntity<Account>(HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
+//        return new ResponseEntity<Account>(HttpStatus.NO_CONTENT);
 //        }
-//
-//        return new ResponseEntity<Account>(HttpStatus.NOT_IMPLEMENTED);
-        int rows = accountService.deleteAccountByIban(iban);
-        if(rows == 1)
-        {
-            return new ResponseEntity<Account>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<Account>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        return new ResponseEntity<Account>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // should be done by transactions
-
-    public ResponseEntity<Transaction> depositMoney(@Parameter(in = ParameterIn.PATH, description = "", required = true, schema = @Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody Transaction body)
+    @RequestMapping(value = "/{iban}/deposit", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Transaction> depositMoney(@Parameter(in = ParameterIn.PATH, description = "", required = true, schema = @Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody TransactionDTO transactionDTO) throws Exception
     {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json"))
-        {
-            try
-            {
-                return new ResponseEntity<Transaction>(objectMapper.readValue("{\n  \"TransactionType\" : \"transfer\",\n  \"userPerforming\" : {\n    \"firstName\" : \"john\",\n    \"lastName\" : \"doe\",\n    \"emailAddress\" : \"john@example.com\",\n    \"Username\" : \"john\",\n    \"UserID\" : 1,\n    \"mobileNumber\" : \"0753846288\",\n    \"sex\" : \"male\",\n    \"dailyLimit\" : 10.5,\n    \"dateOfBirth\" : \"15-01-1996\",\n    \"transactionLimit\" : 10.5,\n    \"primaryAddress\" : {\n      \"country\" : \"country\",\n      \"city\" : \"city\",\n      \"street\" : \"street\",\n      \"houseNumber\" : 0,\n      \"postCode\" : \"postCode\"\n    },\n    \"userRole\" : \"customer\"\n  },\n  \"FromIBAN\" : \"NL01ING09874374839\",\n  \"ToIBAN\" : \"NL01ING09874374839\",\n  \"Amount\" : 801.7481,\n  \"Date\" : \"2000-01-23\",\n  \"TransactionID\" : \"TransactionID\"\n}", Transaction.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e)
-            {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Transaction>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
-        return new ResponseEntity<Transaction>(HttpStatus.NOT_IMPLEMENTED);
+        return ResponseEntity.status(201)
+                .body(transactionService.depositMoney(iban, transactionDTO));
     }
+
     // should be done by accounts
     @RequestMapping(value = "/{iban}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Account> editAccountByIban(@Parameter(in = ParameterIn.PATH, description = "Transaction id", required = true, schema = @Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody AccountDTO accountDTO)
+    public ResponseEntity<Account> editAccountByIban(@Parameter(in = ParameterIn.PATH, description = "Transaction id", required = true, schema = @Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody AccountDTO accountDTO) throws Exception
     {
-//        String accept = request.getHeader("Accept");
-//        if (accept != null && accept.contains("application/json"))
-//        {
-//            try
-//            {
-//                return new ResponseEntity<Account>(objectMapper.readValue("{\n  \"accountStatus\" : \"active\",\n  \"IBAN\" : \"NL02ABNA0123456789\",\n  \"absoluteLimit\" : 10.5,\n  \"balance\" : {\n    \"amount\" : 10.5\n  },\n  \"dailyLimit\" : 10.5,\n  \"accountType\" : \"savings\",\n  \"user\" : {\n    \"firstName\" : \"john\",\n    \"lastName\" : \"doe\",\n    \"emailAddress\" : \"john@example.com\",\n    \"Username\" : \"john\",\n    \"UserID\" : 1,\n    \"mobileNumber\" : \"0753846288\",\n    \"sex\" : \"male\",\n    \"dailyLimit\" : 10.5,\n    \"dateOfBirth\" : \"15-01-1996\",\n    \"transactionLimit\" : 10.5,\n    \"primaryAddress\" : {\n      \"country\" : \"country\",\n      \"city\" : \"city\",\n      \"street\" : \"street\",\n      \"houseNumber\" : 0,\n      \"postCode\" : \"postCode\"\n    },\n    \"userRole\" : \"customer\"\n  },\n  \"dateOfOpening\" : \"05-05-2020\"\n}", Account.class), HttpStatus.NOT_IMPLEMENTED);
-//            } catch (IOException e)
-//            {
-//                log.error("Couldn't serialize response for content type application/json", e);
-//                return new ResponseEntity<Account>(HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//        }
-//
-//        return new ResponseEntity<Account>(HttpStatus.NOT_IMPLEMENTED);
-        return ResponseEntity.status(201).body(accountService.editAccountByAccountByIban(iban, accountDTO));
+
+        return ResponseEntity.status(201)
+                .body(accountService.editAccountByAccountByIban(iban, accountDTO));
 
     }
+
     // should be done by accounts
     @RequestMapping(value = "/{iban}/balance", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     // gets the balance for account by its iban
     public ResponseEntity<Balance> getAccountBalance(@Parameter(in = ParameterIn.PATH, description = "iban", required = true, schema = @Schema()) @PathVariable("iban") String iban)
     {
-//        String accept = request.getHeader("Accept");
-//        if (accept != null && accept.contains("application/json"))
-//        {
-//            try
-//            {
-//                return new ResponseEntity<Balance>(objectMapper.readValue("{\n  \"amount\" : 10.5\n}", Balance.class), HttpStatus.NOT_IMPLEMENTED);
-//            } catch (IOException e)
-//            {
-//                log.error("Couldn't serialize response for content type application/json", e);
-//                return new ResponseEntity<Balance>(HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//        }
-//
-//        return new ResponseEntity<Balance>(HttpStatus.NOT_IMPLEMENTED);
-
-        return ResponseEntity.status(200).body(accountService.getAccountBalanceByIban(iban));
+        return ResponseEntity.status(200)
+                .body(accountService.getAccountBalanceByIban(iban));
 
 
     }
+
     // should be done by accounts
     @RequestMapping(value = "/{iban}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Account> getAccountByIban(@Parameter(in = ParameterIn.PATH, description = "iban of the selected account", required = true, schema = @Schema()) @PathVariable("iban") String iban)
     {
-//        String accept = request.getHeader("Accept");
-//        if (accept != null && accept.contains("application/json"))
-//        {
-//            try
-//            {
-//                return new ResponseEntity<Account>(objectMapper.readValue("{\n  \"accountStatus\" : \"active\",\n  \"IBAN\" : \"NL02ABNA0123456789\",\n  \"absoluteLimit\" : 10.5,\n  \"balance\" : {\n    \"amount\" : 10.5\n  },\n  \"dailyLimit\" : 10.5,\n  \"accountType\" : \"savings\",\n  \"user\" : {\n    \"firstName\" : \"john\",\n    \"lastName\" : \"doe\",\n    \"emailAddress\" : \"john@example.com\",\n    \"Username\" : \"john\",\n    \"UserID\" : 1,\n    \"mobileNumber\" : \"0753846288\",\n    \"sex\" : \"male\",\n    \"dailyLimit\" : 10.5,\n    \"dateOfBirth\" : \"15-01-1996\",\n    \"transactionLimit\" : 10.5,\n    \"primaryAddress\" : {\n      \"country\" : \"country\",\n      \"city\" : \"city\",\n      \"street\" : \"street\",\n      \"houseNumber\" : 0,\n      \"postCode\" : \"postCode\"\n    },\n    \"userRole\" : \"customer\"\n  },\n  \"dateOfOpening\" : \"05-05-2020\"\n}", Account.class), HttpStatus.NOT_IMPLEMENTED);
-//            } catch (IOException e)
-//            {
-//                log.error("Couldn't serialize response for content type application/json", e);
-//                return new ResponseEntity<Account>(HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//        }
-//
-//        return new ResponseEntity<Account>(HttpStatus.NOT_IMPLEMENTED);
-        return ResponseEntity.status(200).body(accountService.getAccountByIban(iban));
+
+        return ResponseEntity.status(200)
+                .body(accountService.getAccountByIban(iban));
 
     }
+
     // should be done by accounts or transactions! doesnt really matter!
-
-    public ResponseEntity<Account> getAccountTransactions(@Parameter(in = ParameterIn.PATH, description = "iban", required = true, schema = @Schema()) @PathVariable("iban") String iban, @NotNull @Min(5L) @Max(50L) @Parameter(in = ParameterIn.QUERY, description = "the limit to get number of accounts", required = true, schema = @Schema(allowableValues = {}, minimum = "5", maximum = "50"
-    )) @Valid @RequestParam(value = "limit", required = true) Long limit, @Min(0L) @Parameter(in = ParameterIn.QUERY, description = "the offset to start getting accounts", schema = @Schema(allowableValues = {}
-    )) @Valid @RequestParam(value = "offset", required = false) Long offset, @Parameter(in = ParameterIn.QUERY, description = "get transactions between two dates", schema = @Schema()) @Valid @RequestParam(value = "betweenDates", required = false) String betweenDates)
+    @RequestMapping(value = "/{iban}/transactions", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Transaction>> getAccountTransactions(@Parameter(in = ParameterIn.PATH, description = "iban", required = true, schema = @Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.QUERY, description = "get transactions between two dates", schema = @Schema()) @Valid @RequestParam(value = "betweenDates", required = false) String betweenDates)
     {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json"))
-        {
-            try
-            {
-                return new ResponseEntity<Account>(objectMapper.readValue("{\n  \"accountStatus\" : \"active\",\n  \"IBAN\" : \"NL02ABNA0123456789\",\n  \"absoluteLimit\" : 10.5,\n  \"balance\" : {\n    \"amount\" : 10.5\n  },\n  \"dailyLimit\" : 10.5,\n  \"accountType\" : \"savings\",\n  \"user\" : {\n    \"firstName\" : \"john\",\n    \"lastName\" : \"doe\",\n    \"emailAddress\" : \"john@example.com\",\n    \"Username\" : \"john\",\n    \"UserID\" : 1,\n    \"mobileNumber\" : \"0753846288\",\n    \"sex\" : \"male\",\n    \"dailyLimit\" : 10.5,\n    \"dateOfBirth\" : \"15-01-1996\",\n    \"transactionLimit\" : 10.5,\n    \"primaryAddress\" : {\n      \"country\" : \"country\",\n      \"city\" : \"city\",\n      \"street\" : \"street\",\n      \"houseNumber\" : 0,\n      \"postCode\" : \"postCode\"\n    },\n    \"userRole\" : \"customer\"\n  },\n  \"dateOfOpening\" : \"05-05-2020\"\n}", Account.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e)
-            {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Account>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
 
-        return new ResponseEntity<Account>(HttpStatus.NOT_IMPLEMENTED);
+        return ResponseEntity.status(200)
+                .body(transactionService.getAllTransactionsForIban(iban));
+//        return null;
+
     }
     // should be done by accounts
 
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Account>> getAllAccounts(@NotNull @Min(5L) @Max(50L) @Parameter(in = ParameterIn.QUERY, description = "the limit to get number of accounts", required = true, schema = @Schema(allowableValues = {}, minimum = "5", maximum = "50"
-    )) @Valid @RequestParam(value = "limit", required = true) Long limit, @Min(0L) @Parameter(in = ParameterIn.QUERY, description = "the offset to start getting accounts", schema = @Schema(allowableValues = {}
-    )) @Valid @RequestParam(value = "offset", required = false) Long offset)
+    public ResponseEntity<List<Account>> getAllAccounts()
     {
-//        String accept = request.getHeader("Accept");
-//        if (accept != null && accept.contains("application/json"))
-//        {
-//            try
-//            {
-//                return new ResponseEntity<List<Account>>(accountService.getAllAccounts(),HttpStatus.OK);
-//
-////                return new ResponseEntity<List<Account>>(objectMapper.readValue("{\n  \"accountStatus\" : \"active\",\n  \"IBAN\" : \"NL02ABNA0123456789\",\n  \"absoluteLimit\" : 10.5,\n  \"balance\" : {\n    \"amount\" : 10.5\n  },\n  \"dailyLimit\" : 10.5,\n  \"accountType\" : \"savings\",\n  \"user\" : {\n    \"firstName\" : \"john\",\n    \"lastName\" : \"doe\",\n    \"emailAddress\" : \"john@example.com\",\n    \"Username\" : \"john\",\n    \"UserID\" : 1,\n    \"mobileNumber\" : \"0753846288\",\n    \"sex\" : \"male\",\n    \"dailyLimit\" : 10.5,\n    \"dateOfBirth\" : \"15-01-1996\",\n    \"transactionLimit\" : 10.5,\n    \"primaryAddress\" : {\n      \"country\" : \"country\",\n      \"city\" : \"city\",\n      \"street\" : \"street\",\n      \"houseNumber\" : 0,\n      \"postCode\" : \"postCode\"\n    },\n    \"userRole\" : \"customer\"\n  },\n  \"dateOfOpening\" : \"05-05-2020\"\n}", Account.class), HttpStatus.NOT_IMPLEMENTED);
-//            } catch (Exception e)
-//            {
-//                log.error("Couldn't serialize response for content type application/json", e);
-//                return new ResponseEntity<List<Account>>(HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//        }
-//        return new ResponseEntity<List<Account>>(HttpStatus.NOT_IMPLEMENTED);
 
-
-        return new ResponseEntity<List<Account>>(accountService.getAllAccounts(),HttpStatus.OK);
+        return new ResponseEntity<List<Account>>(accountService.getAllAccounts(), HttpStatus.OK);
     }
     // should be done by transactions
 
-    // TODO: 6/19/2021
-    @RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Transaction> withdrawMoney(@Parameter(in = ParameterIn.PATH, description = "", required = true, schema = @Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody TransactionDTO body)
+    // done by Fabio and Mona
+    @RequestMapping(value = "/{iban}/withdraw", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Transaction> withdrawMoney(@Parameter(in = ParameterIn.PATH, description = "", required = true, schema = @Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody TransactionDTO transactionDTO) throws Exception
     {
-//        String accept = request.getHeader("Accept");
-//        if (accept != null && accept.contains("application/json"))
+        Transaction performedTransaction = transactionService.withdrawMoney(iban, transactionDTO);
+        return ResponseEntity.status(201)
+                .body(transactionService.withdrawMoney(iban, transactionDTO));
+//        if (performedTransaction.getClass() != ErroredTransaction.class)
 //        {
-//            try
-//            {
-//                return new ResponseEntity<Transaction>(objectMapper.readValue("{\n  \"TransactionType\" : \"transfer\",\n  \"userPerforming\" : {\n    \"firstName\" : \"john\",\n    \"lastName\" : \"doe\",\n    \"emailAddress\" : \"john@example.com\",\n    \"Username\" : \"john\",\n    \"UserID\" : 1,\n    \"mobileNumber\" : \"0753846288\",\n    \"sex\" : \"male\",\n    \"dailyLimit\" : 10.5,\n    \"dateOfBirth\" : \"15-01-1996\",\n    \"transactionLimit\" : 10.5,\n    \"primaryAddress\" : {\n      \"country\" : \"country\",\n      \"city\" : \"city\",\n      \"street\" : \"street\",\n      \"houseNumber\" : 0,\n      \"postCode\" : \"postCode\"\n    },\n    \"userRole\" : \"customer\"\n  },\n  \"FromIBAN\" : \"NL01ING09874374839\",\n  \"ToIBAN\" : \"NL01ING09874374839\",\n  \"Amount\" : 801.7481,\n  \"Date\" : \"2000-01-23\",\n  \"TransactionID\" : \"TransactionID\"\n}", Transaction.class), HttpStatus.NOT_IMPLEMENTED);
-//            } catch (IOException e)
-//            {
-//                log.error("Couldn't serialize response for content type application/json", e);
-//                return new ResponseEntity<Transaction>(HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//        }
+//            return ResponseEntity.status(201)
+//                    .body(transactionService.withdrawMoney(iban, transactionDTO));
+//
+//        } else return new ResponseEntity<Transaction>(performedTransaction, HttpStatus.BAD_REQUEST);
 
-        return new ResponseEntity<Transaction>(HttpStatus.NOT_IMPLEMENTED);
     }
 
 }

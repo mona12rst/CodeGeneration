@@ -4,22 +4,28 @@ package io.swagger.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.exception.IncorrectIBANException;
+import io.swagger.exception.InvalidAccountException;
 import io.swagger.model.enums.AccountStatusEnum;
+import io.swagger.model.enums.AccountTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 
+
+import javax.annotation.Generated;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
  * Account
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T13:48:13.918Z[GMT]")
+@Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T13:48:13.918Z[GMT]")
 
 
 @Entity
@@ -40,8 +46,7 @@ public class Account implements Serializable
     private long accountId;
     @JsonProperty("absoluteLimit")
     private double absoluteLimit;
-    @JsonProperty("dailyLimit")
-    private double dailyLimit;
+
     @OneToOne
     @JsonProperty("balance")
     private Balance balance = null;
@@ -60,40 +65,36 @@ public class Account implements Serializable
         return accountId;
     }
 
-    public Account IBAN(String IBAN)
+    public Account IBAN(String IBAN) throws IncorrectIBANException
     {
+        IBANHelper.validate(IBAN);
         this.IBAN = IBAN;
         return this;
     }
-
-    /**
-     * Get IBAN
-     *
-     * @return IBAN
-     **/
-//    @Schema(example = "NL02ABNA0123456789", required = true, description = "")
 
     public String getIBAN()
     {
         return IBAN;
     }
 
-    public void setIBAN(String IBAN)
+    public void setIBAN(String IBAN) throws IncorrectIBANException
     {
+        IBANHelper.validate(IBAN);
+
         this.IBAN = IBAN;
     }
 
-    public Account absoluteLimit(double absoluteLimit)
+    public Account absoluteLimit(double absoluteLimit) throws Exception
     {
+        if(absoluteLimit < 0)
+        {
+            throw new InvalidAccountException("absolute limit cant be less than zero!");
+        }
         this.absoluteLimit = absoluteLimit;
         return this;
     }
 
-    /**
-     * Get absoluteLimit
-     *
-     * @return absoluteLimit
-     **/
+
     @Schema(example = "10.5", required = true, description = "")
 
     public double getAbsoluteLimit()
@@ -101,76 +102,56 @@ public class Account implements Serializable
         return absoluteLimit;
     }
 
-    public void setAbsoluteLimit(double absoluteLimit)
+    public void setAbsoluteLimit(double absoluteLimit) throws InvalidAccountException
     {
+        if(absoluteLimit < 0)
+        {
+            throw new InvalidAccountException("absolute limit cant be less than zero!");
+        }
         this.absoluteLimit = absoluteLimit;
     }
 
-    public Account dailyLimit(double dailyLimit)
+
+    public Account balance(Balance balance) throws Exception
     {
-        this.dailyLimit = dailyLimit;
-        return this;
-    }
-//    public Account IBAN(String iban)
-//    {
-//        this.IBAN = iban;
-//        return this;
-//    }
-
-    /**
-     * Get dailyLimit
-     *
-     * @return dailyLimit
-     **/
-    @Schema(example = "10.5", description = "")
-
-    public double getDailyLimit()
-    {
-        return dailyLimit;
-    }
-
-    public void setDailyLimit(double dailyLimit)
-    {
-        this.dailyLimit = dailyLimit;
-    }
-
-
-    public Account balance(Balance balance)
-    {
+        if(balance.getAmount() < this.absoluteLimit)
+        {
+            throw new InvalidAccountException("balance cant be less than absolute limit");
+        }
         this.balance = balance;
         return this;
     }
 
-    /**
-     * Get balance
-     *
-     * @return balance
-     **/
+
     @Schema(required = true, description = "")
     @NotNull
-
     @Valid
     public Balance getBalance()
     {
         return balance;
     }
 
-    public void setBalance(Balance balance)
+    public void setBalance(Balance balance) throws Exception
     {
+        if(balance.getAmount() < this.absoluteLimit)
+        {
+            throw new InvalidAccountException("balance cant be less than absolute limit");
+        }
         this.balance = balance;
     }
 
-    public Account dateOfOpening(String dateOfOpening)
+    public Account dateOfOpening(String dateOfOpening) throws InvalidAccountException
     {
-        this.dateOfOpening = dateOfOpening;
+//        if(LocalDateTime.parse(dateOfOpening).compareTo(LocalDateTime.now()) != 0)
+//        {
+//            throw new InvalidAccountException("the date of opening for the account must be present(now).");
+//        }
+//        this.dateOfOpening = dateOfOpening;
+        this.dateOfOpening = LocalDateTime.now().toString();
         return this;
     }
 
-    /**
-     * Get dateOfOpening
-     *
-     * @return dateOfOpening
-     **/
+
     @Schema(example = "05-05-2020", required = true, description = "")
     @NotNull
 
@@ -179,46 +160,56 @@ public class Account implements Serializable
         return dateOfOpening;
     }
 
-    public void setDateOfOpening(String dateOfOpening)
+    public void setDateOfOpening(String dateOfOpening) throws InvalidAccountException
     {
-        this.dateOfOpening = dateOfOpening;
+//        if(LocalDateTime.parse(dateOfOpening).compareTo(LocalDateTime.now()) != 0)
+//        {
+//            throw new InvalidAccountException("the date of opening for the account must be present(now).");
+//        }
+        this.dateOfOpening = LocalDateTime.now().toString();
+
+
     }
 
     public Account accountType(AccountTypeEnum accountType)
     {
+        if(accountType == null)
+        {
+            this.accountType = AccountTypeEnum.CURRENT;
+        }
         this.accountType = accountType;
         return this;
     }
-
-    /**
-     * Get accountType
-     *
-     * @return accountType
-     **/
-    @Schema(required = true, description = "")
-    @NotNull
+//
+//    @Schema(required = true, description = "")
+//    @NotNull
 
     public AccountTypeEnum getAccountType()
     {
+
         return accountType;
     }
 
     public void setAccountType(AccountTypeEnum accountType)
     {
+        if(accountType == null) // if they dont provide anything by default it should be current
+        {
+            this.accountType = AccountTypeEnum.CURRENT;
+        }
         this.accountType = accountType;
     }
 
-    public Account accountStatus(AccountStatusEnum accountStatus)
+    public Account accountStatus(AccountStatusEnum accountStatus) throws Exception
     {
+        if(accountStatus == null)
+        {
+            throw new InvalidAccountException("account status cant be null");
+        }
         this.accountStatus = accountStatus;
         return this;
     }
 
-    /**
-     * Get accountStatus
-     *
-     * @return accountStatus
-     **/
+
     @Schema(description = "")
 
     public AccountStatusEnum getAccountStatus()
@@ -231,17 +222,17 @@ public class Account implements Serializable
         this.accountStatus = accountStatus;
     }
 
-    public Account user(User user)
+    public Account user(User user) throws Exception
     {
+        if(user == null)
+        {
+            throw new InvalidAccountException("user of the account cant be null");
+        }
         this.user = user;
         return this;
     }
 
-    /**
-     * Get user
-     *
-     * @return user
-     **/
+
     @Schema(required = true, description = "")
     @NotNull
 
@@ -251,8 +242,12 @@ public class Account implements Serializable
         return user;
     }
 
-    public void setUser(User user)
+    public void setUser(User user) throws Exception
     {
+        if(user == null)
+        {
+            throw new InvalidAccountException("user of the account cant be null");
+        }
         this.user = user;
     }
 
@@ -270,7 +265,7 @@ public class Account implements Serializable
         Account account = (Account) o;
         return Objects.equals(this.IBAN, account.IBAN) &&
                 Objects.equals(this.absoluteLimit, account.absoluteLimit) &&
-                Objects.equals(this.dailyLimit, account.dailyLimit) &&
+//                Objects.equals(this.dailyLimit, account.dailyLimit) &&
                 Objects.equals(this.balance, account.balance) &&
                 Objects.equals(this.dateOfOpening, account.dateOfOpening) &&
                 Objects.equals(this.accountType, account.accountType) &&
@@ -281,7 +276,7 @@ public class Account implements Serializable
     @Override
     public int hashCode()
     {
-        return Objects.hash(IBAN, absoluteLimit, dailyLimit, balance, dateOfOpening, accountType, accountStatus, user);
+        return Objects.hash(IBAN, absoluteLimit, /*dailyLimit,*/ balance, dateOfOpening, accountType, accountStatus, user);
     }
 
     @Override
@@ -292,7 +287,7 @@ public class Account implements Serializable
 
         sb.append("    IBAN: ").append(toIndentedString(IBAN)).append("\n");
         sb.append("    absoluteLimit: ").append(toIndentedString(absoluteLimit)).append("\n");
-        sb.append("    dailyLimit: ").append(toIndentedString(dailyLimit)).append("\n");
+//        sb.append("    dailyLimit: ").append(toIndentedString(dailyLimit)).append("\n");
         sb.append("    balance: ").append(toIndentedString(balance)).append("\n");
         sb.append("    dateOfOpening: ").append(toIndentedString(dateOfOpening)).append("\n");
         sb.append("    accountType: ").append(toIndentedString(accountType)).append("\n");
@@ -315,42 +310,7 @@ public class Account implements Serializable
         return o.toString().replace("\n", "\n    ");
     }
 
-    /**
-     * Gets or Sets accountType
-     */
-    public enum AccountTypeEnum
-    {
-        SAVINGS("savings"),
 
-        CURRENT("current");
-
-        private String value;
-
-        AccountTypeEnum(String value)
-        {
-            this.value = value;
-        }
-
-        @JsonCreator
-        public static AccountTypeEnum fromValue(String text)
-        {
-            for (AccountTypeEnum b : AccountTypeEnum.values())
-            {
-                if (String.valueOf(b.value).equals(text))
-                {
-                    return b;
-                }
-            }
-            return null;
-        }
-
-        @Override
-        @JsonValue
-        public String toString()
-        {
-            return String.valueOf(value);
-        }
-    }
 
 
 

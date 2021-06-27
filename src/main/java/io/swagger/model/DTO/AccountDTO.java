@@ -4,10 +4,14 @@ package io.swagger.model.DTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.model.*;
 import io.swagger.model.enums.AccountStatusEnum;
+import io.swagger.model.enums.AccountTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
+import javax.annotation.Generated;
 import javax.persistence.OneToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -16,21 +20,23 @@ import java.util.Objects;
 
 
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T13:48:13.918Z[GMT]")
+@Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T13:48:13.918Z[GMT]")
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AccountDTO
 {
     @JsonProperty("absoluteLimit")
     private double absoluteLimit;
-    @JsonProperty("dailyLimit")
-    private double dailyLimit;
+//    @JsonProperty("dailyLimit")
+//    private double dailyLimit;
     @OneToOne
     @JsonProperty("balance")
     private Balance balance = null;
     @JsonProperty("dateOfOpening")
     private String dateOfOpening = null;
     @JsonProperty("accountType")
-    private Account.AccountTypeEnum accountType = null;
+    private AccountTypeEnum accountType = null;
     @JsonProperty("accountStatus")
     private AccountStatusEnum accountStatus = null;
     @JsonProperty("user")
@@ -44,46 +50,46 @@ public class AccountDTO
         this.absoluteLimit = absoluteLimit;
         return this;
     }
-
-    /**
-     * Get absoluteLimit
-     *
-     * @return absoluteLimit
-     **/
+//
+//    /**
+//     * Get absoluteLimit
+//     *
+//     * @return absoluteLimit
+//     **/
     @Schema(example = "10.5", required = true, description = "")
-
+//
     public double getAbsoluteLimit()
     {
         return absoluteLimit;
     }
-
+//
     public void setAbsoluteLimit(double absoluteLimit)
     {
         this.absoluteLimit = absoluteLimit;
     }
-
-    public AccountDTO dailyLimit(double dailyLimit)
-    {
-        this.dailyLimit = dailyLimit;
-        return this;
-    }
-
-    /**
-     * Get dailyLimit
-     *
-     * @return dailyLimit
-     **/
-    @Schema(example = "10.5", description = "")
-
-    public double getDailyLimit()
-    {
-        return dailyLimit;
-    }
-
-    public void setDailyLimit(double dailyLimit)
-    {
-        this.dailyLimit = dailyLimit;
-    }
+//
+//    public AccountDTO dailyLimit(double dailyLimit)
+//    {
+//        this.dailyLimit = dailyLimit;
+//        return this;
+//    }
+//
+//    /**
+//     * Get dailyLimit
+//     *
+//     * @return dailyLimit
+//     **/
+//    @Schema(example = "10.5", description = "")
+//
+//    public double getDailyLimit()
+//    {
+//        return dailyLimit;
+//    }
+//
+//    public void setDailyLimit(double dailyLimit)
+//    {
+//        this.dailyLimit = dailyLimit;
+//    }
 
 
     public AccountDTO balance(Balance balance)
@@ -135,7 +141,7 @@ public class AccountDTO
         this.dateOfOpening = dateOfOpening;
     }
 
-    public AccountDTO accountType(Account.AccountTypeEnum accountType)
+    public AccountDTO accountType(AccountTypeEnum accountType)
     {
         this.accountType = accountType;
         return this;
@@ -149,12 +155,12 @@ public class AccountDTO
     @Schema(required = true, description = "")
     @NotNull
 
-    public Account.AccountTypeEnum getAccountType()
+    public AccountTypeEnum getAccountType()
     {
         return accountType;
     }
 
-    public void setAccountType(Account.AccountTypeEnum accountType)
+    public void setAccountType(AccountTypeEnum accountType)
     {
         this.accountType = accountType;
     }
@@ -219,7 +225,7 @@ public class AccountDTO
         AccountDTO account = (AccountDTO) o;
         return /*Objects.equals(this.IBAN, account.IBAN) &&*/
                 Objects.equals(this.absoluteLimit, account.absoluteLimit) &&
-                Objects.equals(this.dailyLimit, account.dailyLimit) &&
+//                Objects.equals(this.dailyLimit, account.dailyLimit) &&
                 Objects.equals(this.balance, account.balance) &&
                 Objects.equals(this.dateOfOpening, account.dateOfOpening) &&
                 Objects.equals(this.accountType, account.accountType) &&
@@ -230,7 +236,7 @@ public class AccountDTO
     @Override
     public int hashCode()
     {
-        return Objects.hash(absoluteLimit, dailyLimit, balance, dateOfOpening, accountType, accountStatus, user);
+        return Objects.hash(absoluteLimit, /*dailyLimit,*/ balance, dateOfOpening, accountType, accountStatus, user);
     }
 
     @Override
@@ -241,7 +247,7 @@ public class AccountDTO
 
 //        sb.append("    IBAN: ").append(toIndentedString(IBAN)).append("\n");
         sb.append("    absoluteLimit: ").append(toIndentedString(absoluteLimit)).append("\n");
-        sb.append("    dailyLimit: ").append(toIndentedString(dailyLimit)).append("\n");
+//        sb.append("    dailyLimit: ").append(toIndentedString(dailyLimit)).append("\n");
         sb.append("    balance: ").append(toIndentedString(balance)).append("\n");
         sb.append("    dateOfOpening: ").append(toIndentedString(dateOfOpening)).append("\n");
         sb.append("    accountType: ").append(toIndentedString(accountType)).append("\n");

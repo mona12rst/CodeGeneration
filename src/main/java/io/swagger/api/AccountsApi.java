@@ -5,6 +5,8 @@
  */
 package io.swagger.api;
 
+import io.swagger.exception.IncorrectIBANException;
+import io.swagger.exception.InvalidAccountException;
 import io.swagger.model.Account;
 import io.swagger.model.Balance;
 import io.swagger.model.DTO.AccountDTO;
@@ -18,6 +20,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,13 +35,12 @@ import java.util.List;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T13:48:13.918Z[GMT]")
 @Validated
-public interface AccountsApi {
+public interface AccountsApi
+{
 
 
-    @Operation(summary = "Creates an account.", description = "creates a new account can only be done by an employee", security = {
-            @SecurityRequirement(name = "bearerAuth")}, tags = {"Accounts"})
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Account created", content = @Content(schema = @Schema(implementation = Account.class))),
+    @Operation(summary = "Creates an account.", description = "creates a new account can only be done by an employee", security = {@SecurityRequirement(name = "bearerAuth")}, tags = {"Accounts"})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Account created", content = @Content(schema = @Schema(implementation = Account.class))),
 
             @ApiResponse(responseCode = "201", description = "Created", content = @Content(schema = @Schema(implementation = Account.class))),
 
@@ -51,123 +53,76 @@ public interface AccountsApi {
             @ApiResponse(responseCode = "409", description = "Conflict"),
 
             @ApiResponse(responseCode = "500", description = "Oops, something went wrong on the server.")})
-    @RequestMapping(value = "/accounts",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.POST)
-    ResponseEntity<Account> createAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody AccountDTO accountDTO);
+    @RequestMapping(value = "/accounts", produces = {"application/json"}, consumes = {"application/json"}, method = RequestMethod.POST)
+    ResponseEntity<Account> createAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody AccountDTO accountDTO) throws Exception;
+
+
+    @Operation(summary = "delets an account", description = "deletes an account", security = {@SecurityRequirement(name = "bearerAuth")}, tags = {"Accounts"})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "successful", content = @Content(schema = @Schema(implementation = Account.class)))})
+    @RequestMapping(value = "/Accounts/{iban}", produces = {"application/json"}, method = RequestMethod.DELETE)
+    ResponseEntity<Account> deleteAccount(@Parameter(in = ParameterIn.PATH, description = "Transaction id", required = true, schema = @Schema()) @PathVariable("iban") String iban);
+
+
+    @Operation(summary = "deposit money", description = "Initiate a payment process.", security = {@SecurityRequirement(name = "bearerAuth")}, tags = {"Accounts"})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Transaction created", content = @Content(schema = @Schema(implementation = Transaction.class))),
+
+            @ApiResponse(responseCode = "201", description = "Created"),
+
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+
+            @ApiResponse(responseCode = "403", description = "Forbidden, you do not have access rights"),
+
+            @ApiResponse(responseCode = "404", description = "Not found"),
+
+            @ApiResponse(responseCode = "409", description = "Conflict"),
+
+            @ApiResponse(responseCode = "500", description = "Oops, something went wrong on the server.")})
+    @RequestMapping(value = "/Accounts/{iban}/deposit", produces = {"application/json"}, consumes = {"application/json"}, method = RequestMethod.POST)
+    ResponseEntity<Transaction> depositMoney(@Parameter(in = ParameterIn.PATH, description = "", required = true, schema = @Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody TransactionDTO body) throws Exception;
+
+
+    @Operation(summary = "edits an account", description = "Get Transaction History Using filters", security = {@SecurityRequirement(name = "bearerAuth")}, tags = {"Accounts"})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "successful", content = @Content(schema = @Schema(implementation = Account.class)))})
+    @RequestMapping(value = "/Accounts/{iban}", produces = {"application/json"}, consumes = {"application/json"}, method = RequestMethod.PUT)
+    ResponseEntity<Account> editAccountByIban(@Parameter(in = ParameterIn.PATH, description = "Transaction id", required = true, schema = @Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody AccountDTO accountDTO) throws Exception;
+
+
+    @Operation(summary = "gets balance for a specific account", description = "gets balance", security = {@SecurityRequirement(name = "bearerAuth")}, tags = {"Accounts"})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "successful", content = @Content(schema = @Schema(implementation = Balance.class)))})
+    @RequestMapping(value = "/Accounts/{iban}/balance", produces = {"application/json"}, method = RequestMethod.GET)
+    ResponseEntity<Balance> getAccountBalance(@Parameter(in = ParameterIn.PATH, description = "iban", required = true, schema = @Schema()) @PathVariable("iban") String iban);
+
+
+    @Operation(summary = "gets all accounts for a specific iban", description = "gets all accounts by iban", security = {@SecurityRequirement(name = "bearerAuth")}, tags = {"Accounts"})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "successful", content = @Content(schema = @Schema(implementation = Account.class)))})
+    @RequestMapping(value = "/Accounts/{iban}", produces = {"application/json"}, method = RequestMethod.GET)
+    ResponseEntity<Account> getAccountByIban(@Parameter(in = ParameterIn.PATH, description = "iban of the selected account", required = true, schema = @Schema()) @PathVariable("iban") String iban);
 
 
 
-    @Operation(summary = "delets an account", description = "deletes an account", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "Accounts" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "successful", content = @Content(schema = @Schema(implementation = Account.class))) })
-    @RequestMapping(value = "/Accounts/{iban}",
-        produces = { "application/json" }, 
-        method = RequestMethod.DELETE)
-    ResponseEntity<Account> deleteAccount(@Parameter(in = ParameterIn.PATH, description = "Transaction id", required=true, schema=@Schema()) @PathVariable("iban") String iban);
+
+    @Operation(summary = "gets all accounts", description = "gets all accounts by params", security = {@SecurityRequirement(name = "bearerAuth")}, tags = {"Accounts"})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "successful", content = @Content(schema = @Schema(implementation = Account.class)))})
+    @RequestMapping(value = "/Accounts", produces = {"application/json"}, method = RequestMethod.GET)
+    ResponseEntity<List<Account>> getAllAccounts();
 
 
-    @Operation(summary = "deposit money", description = "Initiate a payment process.", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "Accounts" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "Transaction created", content = @Content(schema = @Schema(implementation = Transaction.class))),
-        
-        @ApiResponse(responseCode = "201", description = "Created"),
-        
-        @ApiResponse(responseCode = "400", description = "Invalid input"),
-        
-        @ApiResponse(responseCode = "403", description = "Forbidden, you do not have access rights"),
-        
-        @ApiResponse(responseCode = "404", description = "Not found"),
-        
-        @ApiResponse(responseCode = "409", description = "Conflict"),
-        
-        @ApiResponse(responseCode = "500", description = "Oops, something went wrong on the server.") })
-    @RequestMapping(value = "/Accounts/{iban}/deposit",
-        produces = { "application/json" }, 
-        consumes = { "application/json" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<Transaction> depositMoney(@Parameter(in = ParameterIn.PATH, description = "", required=true, schema=@Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody Transaction body);
+    @Operation(summary = "withdraw money", description = "Initiate a payment process.", security = {@SecurityRequirement(name = "bearerAuth")}, tags = {"Accounts"})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Transaction created", content = @Content(schema = @Schema(implementation = Transaction.class))),
 
+            @ApiResponse(responseCode = "201", description = "Created"),
 
-    @Operation(summary = "edits an account", description = "Get Transaction History Using filters", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "Accounts" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "successful", content = @Content(schema = @Schema(implementation = Account.class))) })
-    @RequestMapping(value = "/Accounts/{iban}",
-        produces = { "application/json" }, 
-        consumes = { "application/json" }, 
-        method = RequestMethod.PUT)
-    ResponseEntity<Account> editAccountByIban(@Parameter(in = ParameterIn.PATH, description = "Transaction id", required=true, schema=@Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody AccountDTO accountDTO);
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
 
+            @ApiResponse(responseCode = "403", description = "Forbidden, you do not have access rights"),
 
-    @Operation(summary = "gets balance for a specific account", description = "gets balance", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "Accounts" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "successful", content = @Content(schema = @Schema(implementation = Balance.class))) })
-    @RequestMapping(value = "/Accounts/{iban}/balance",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
-    ResponseEntity<Balance> getAccountBalance(@Parameter(in = ParameterIn.PATH, description = "iban", required=true, schema=@Schema()) @PathVariable("iban") String iban);
+            @ApiResponse(responseCode = "404", description = "Not found"),
 
+            @ApiResponse(responseCode = "409", description = "Conflict"),
 
-    @Operation(summary = "gets all accounts for a specific iban", description = "gets all accounts by iban", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "Accounts" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "successful", content = @Content(schema = @Schema(implementation = Account.class))) })
-    @RequestMapping(value = "/Accounts/{iban}",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
-    ResponseEntity<Account> getAccountByIban(@Parameter(in = ParameterIn.PATH, description = "iban of the selected account", required=true, schema=@Schema()) @PathVariable("iban") String iban);
-
-
-    @Operation(summary = "gets transactions for account", description = "gets transactions for account", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "Accounts" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "successful", content = @Content(schema = @Schema(implementation = Account.class))) })
-    @RequestMapping(value = "/Accounts/{iban}/transactions",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
-    ResponseEntity<Account> getAccountTransactions(@Parameter(in = ParameterIn.PATH, description = "iban", required=true, schema=@Schema()) @PathVariable("iban") String iban, @NotNull @Min(5L) @Max(50L) @Parameter(in = ParameterIn.QUERY, description = "the limit to get number of accounts" ,required=true,schema=@Schema(allowableValues={  }, minimum="5", maximum="50"
-)) @Valid @RequestParam(value = "limit", required = true) Long limit, @Min(0L)@Parameter(in = ParameterIn.QUERY, description = "the offset to start getting accounts" ,schema=@Schema(allowableValues={  }
-)) @Valid @RequestParam(value = "offset", required = false) Long offset, @Parameter(in = ParameterIn.QUERY, description = "get transactions between two dates" ,schema=@Schema()) @Valid @RequestParam(value = "betweenDates", required = false) String betweenDates);
-
-
-    @Operation(summary = "gets all accounts", description = "gets all accounts by params", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "Accounts" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "successful", content = @Content(schema = @Schema(implementation = Account.class))) })
-    @RequestMapping(value = "/Accounts",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
-    ResponseEntity<List<Account>> getAllAccounts(@NotNull @Min(5L) @Max(50L) @Parameter(in = ParameterIn.QUERY, description = "the limit to get number of accounts" ,required=true,schema=@Schema(allowableValues={  }, minimum="5", maximum="50"
-)) @Valid @RequestParam(value = "limit", required = true) Long limit, @Min(0L)@Parameter(in = ParameterIn.QUERY, description = "the offset to start getting accounts" ,schema=@Schema(allowableValues={  }
-)) @Valid @RequestParam(value = "offset", required = false) Long offset);
-
-
-    @Operation(summary = "withdraw money", description = "Initiate a payment process.", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "Accounts" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "Transaction created", content = @Content(schema = @Schema(implementation = Transaction.class))),
-        
-        @ApiResponse(responseCode = "201", description = "Created"),
-        
-        @ApiResponse(responseCode = "400", description = "Invalid input"),
-        
-        @ApiResponse(responseCode = "403", description = "Forbidden, you do not have access rights"),
-        
-        @ApiResponse(responseCode = "404", description = "Not found"),
-        
-        @ApiResponse(responseCode = "409", description = "Conflict"),
-        
-        @ApiResponse(responseCode = "500", description = "Oops, something went wrong on the server.") })
-    @RequestMapping(value = "/Accounts/{iban}/withdraw",
-        produces = { "application/json" }, 
-        consumes = { "application/json" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<Transaction> withdrawMoney(@Parameter(in = ParameterIn.PATH, description = "", required=true, schema=@Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody TransactionDTO body);
+            @ApiResponse(responseCode = "500", description = "Oops, something went wrong on the server.")})
+    @RequestMapping(value = "/Accounts/{iban}/withdraw", produces = {"application/json"}, consumes = {"application/json"}, method = RequestMethod.POST)
+    ResponseEntity<Transaction> withdrawMoney(@Parameter(in = ParameterIn.PATH, description = "", required = true, schema = @Schema()) @PathVariable("iban") String iban, @Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody TransactionDTO body) throws Exception;
 
 }
 

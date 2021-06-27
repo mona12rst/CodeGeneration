@@ -1,17 +1,19 @@
 package io.swagger.model.DTO;
 
+import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 //import io.swagger.model.Address;
-import io.swagger.model.UserRoleEnum;
+import io.swagger.model.enums.UserRoleEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.math.BigDecimal;
-
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
+import javax.annotation.Generated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -19,9 +21,11 @@ import javax.validation.constraints.*;
  * UserToCreate
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T13:48:13.918Z[GMT]")
+@Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-17T13:48:13.918Z[GMT]")
 
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDTO
 {
     @JsonProperty("Username")
@@ -36,38 +40,7 @@ public class UserDTO
     @JsonProperty("emailAddress")
     private String emailAddress = null;
 
-    /**
-     * Gets or Sets sex
-     */
-//  public enum SexEnum {
-//    MALE("male"),
-//
-//    FEMALE("female");
-//
-//    private String value;
-//
-//    SexEnum(String value) {
-//      this.value = value;
-//    }
-//
-//    @Override
-//    @JsonValue
-//    public String toString() {
-//      return String.valueOf(value);
-//    }
-//
-//    @JsonCreator
-//    public static SexEnum fromValue(String text) {
-//      for (SexEnum b : SexEnum.values()) {
-//        if (String.valueOf(b.value).equals(text)) {
-//          return b;
-//        }
-//      }
-//      return null;
-//    }
-//  }
-//  @JsonProperty("sex")
-//  private SexEnum sex = null;
+
 
     @JsonProperty("dateOfBirth")
     private String dateOfBirth = null;
@@ -76,17 +49,17 @@ public class UserDTO
     private String mobileNumber = null;
 
     @JsonProperty("dailyLimit")
-    private BigDecimal dailyLimit = null;
+    private double dailyLimit;
 
     @JsonProperty("transactionLimit")
-    private BigDecimal transactionLimit = null;
+    private double transactionLimit;
 
 //    @JsonProperty("primaryAddress")
 //    private Address primaryAddress = null;
 
 
     @JsonProperty("userRole")
-    private UserRoleEnum userRole = null;
+    private List<UserRoleEnum> userRoles = null;
 
     public UserDTO username(String username)
     {
@@ -252,7 +225,7 @@ public class UserDTO
         this.mobileNumber = mobileNumber;
     }
 
-    public UserDTO dailyLimit(BigDecimal dailyLimit)
+    public UserDTO dailyLimit(double dailyLimit)
     {
         this.dailyLimit = dailyLimit;
         return this;
@@ -264,20 +237,18 @@ public class UserDTO
      * @return dailyLimit
      **/
     @Schema(example = "10.5", required = true, description = "")
-    @NotNull
 
-    @Valid
-    public BigDecimal getDailyLimit()
+    public double getDailyLimit()
     {
         return dailyLimit;
     }
 
-    public void setDailyLimit(BigDecimal dailyLimit)
+    public void setDailyLimit(double dailyLimit)
     {
         this.dailyLimit = dailyLimit;
     }
 
-    public UserDTO transactionLimit(BigDecimal transactionLimit)
+    public UserDTO transactionLimit(double transactionLimit)
     {
         this.transactionLimit = transactionLimit;
         return this;
@@ -289,15 +260,13 @@ public class UserDTO
      * @return transactionLimit
      **/
     @Schema(example = "10.5", required = true, description = "")
-    @NotNull
 
-    @Valid
-    public BigDecimal getTransactionLimit()
+    public double getTransactionLimit()
     {
         return transactionLimit;
     }
 
-    public void setTransactionLimit(BigDecimal transactionLimit)
+    public void setTransactionLimit(double transactionLimit)
     {
         this.transactionLimit = transactionLimit;
     }
@@ -327,9 +296,9 @@ public class UserDTO
 //        this.primaryAddress = primaryAddress;
 //    }
 
-    public UserDTO userRole(UserRoleEnum userRole)
+    public UserDTO userRole(List<UserRoleEnum> userRoles)
     {
-        this.userRole = userRole;
+        this.userRoles = userRoles;
         return this;
     }
 
@@ -340,14 +309,14 @@ public class UserDTO
      **/
     @Schema(description = "")
 
-    public UserRoleEnum getUserRole()
+    public List<UserRoleEnum> getUserRoles()
     {
-        return userRole;
+        return userRoles;
     }
 
-    public void setUserRole(UserRoleEnum userRole)
+    public void setUserRoles(List<UserRoleEnum> userRoles)
     {
-        this.userRole = userRole;
+        this.userRoles = userRoles;
     }
 
 
@@ -373,13 +342,13 @@ public class UserDTO
                 Objects.equals(this.dailyLimit, userDTO.dailyLimit) &&
                 Objects.equals(this.transactionLimit, userDTO.transactionLimit) &&
 //                Objects.equals(this.primaryAddress, userDTO.primaryAddress) &&
-                Objects.equals(this.userRole, userDTO.userRole);
+                Objects.equals(this.userRoles, userDTO.userRoles);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(username, firstName, lastName, emailAddress/*, sex*/, dateOfBirth, mobileNumber, dailyLimit, transactionLimit, /*primaryAddress,*/ userRole);
+        return Objects.hash(username, firstName, lastName, emailAddress/*, sex*/, dateOfBirth, mobileNumber, dailyLimit, transactionLimit, /*primaryAddress,*/ userRoles);
     }
 
     @Override
@@ -417,7 +386,7 @@ public class UserDTO
 //                .append(toIndentedString(primaryAddress))
 //                .append("\n");
         sb.append("    userRole: ")
-                .append(toIndentedString(userRole))
+                .append(toIndentedString(userRoles))
                 .append("\n");
         sb.append("}");
         return sb.toString();

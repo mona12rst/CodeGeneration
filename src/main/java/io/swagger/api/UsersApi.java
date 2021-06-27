@@ -53,7 +53,7 @@ public interface UsersApi
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.POST)
-    ResponseEntity<User> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody UserDTO body);
+    ResponseEntity<User> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody UserDTO body) throws Exception;
 
 
     @Operation(summary = "Delete user", description = "This can only be done by the logged in user as Employee or BankSuperAdmin", security = {
@@ -66,7 +66,7 @@ public interface UsersApi
             @ApiResponse(responseCode = "404", description = "User not found")})
     @RequestMapping(value = "/users/{userId}",
             method = RequestMethod.DELETE)
-    ResponseEntity<Void> deleteUser(@Parameter(in = ParameterIn.PATH, description = "Enter userId to fetch the user detail", required = true, schema = @Schema()) @PathVariable("userId") Integer userId);
+    ResponseEntity<Void> deleteUser(@Parameter(in = ParameterIn.PATH, description = "Enter userId to fetch the user detail", required = true, schema = @Schema()) @PathVariable("userId") long userId);
 
 
     @Operation(summary = "Update user information", description = "This can only be done by the logged in user.", security = {
@@ -80,7 +80,7 @@ public interface UsersApi
     @RequestMapping(value = "/users/{userId}",
             consumes = {"application/json"},
             method = RequestMethod.PUT)
-    ResponseEntity<User> editUser(@Parameter(in = ParameterIn.PATH, description = "Enter userId to fetch the user detail", required = true, schema = @Schema()) @PathVariable("userId") Integer userId, @Parameter(in = ParameterIn.DEFAULT, description = "the user to be edited", required = true, schema = @Schema()) @Valid @RequestBody UserDTO body);
+    ResponseEntity<User> editUser(@Parameter(in = ParameterIn.PATH, description = "Enter userId to fetch the user detail", required = true, schema = @Schema()) @PathVariable("userId") Integer userId, @Parameter(in = ParameterIn.DEFAULT, description = "the user to be edited", required = true, schema = @Schema()) @Valid @RequestBody UserDTO body) throws Exception;
 
 
 //    @Operation(summary = "Get accounts for a user", description = "", security = {
@@ -122,10 +122,7 @@ public interface UsersApi
     @RequestMapping(value = "/users",
             produces = {"application/json"},
             method = RequestMethod.GET)
-    ResponseEntity<List<User>> getUsers(@NotNull @Min(20L) @Max(50L) @Parameter(in = ParameterIn.QUERY, description = "the limit to get number of users", required = true, schema = @Schema(allowableValues = {}, minimum = "20", maximum = "50"
-    )) @Valid @RequestParam(value = "limit", required = true) Long limit, @Parameter(in = ParameterIn.QUERY, description = "the user name to be searched", schema = @Schema()) @Valid @RequestParam(value = "lastName", required = false) String lastName, @Min(1L) @Parameter(in = ParameterIn.QUERY, description = "the userId to be fetched", schema = @Schema(allowableValues = {}, minimum = "1"
-    )) @Valid @RequestParam(value = "userId", required = false) Long userId, @Min(0L) @Parameter(in = ParameterIn.QUERY, description = "the offset to start getting users", schema = @Schema(allowableValues = {}
-    )) @Valid @RequestParam(value = "offset", required = false) Long offset);
+    public ResponseEntity<List<User>> getUsers();
 
 }
 

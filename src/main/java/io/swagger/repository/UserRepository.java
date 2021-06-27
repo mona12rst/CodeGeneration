@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends CrudRepository<User, Integer>
 {
     User findUserByUserID(long id);
+    void deleteUserByUserID(long id);
+    User findUserByUsername(String username);
 }

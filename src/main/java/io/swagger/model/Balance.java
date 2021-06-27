@@ -4,10 +4,12 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.exception.InvalidAccountException;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.math.BigDecimal;
 
+import lombok.Builder;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.Entity;
@@ -24,6 +26,8 @@ import javax.validation.constraints.*;
 
 
 @Entity
+
+
 public class Balance
 {
     @Id
@@ -38,17 +42,17 @@ public class Balance
     @JsonProperty("amount")
     private double amount;
 
-    public Balance amount(double amount)
+    public Balance amount(double amount) throws Exception
     {
+        if(amount < 0)
+        {
+            throw new InvalidAccountException("amount cant be less than zero");
+        }
         this.amount = amount;
         return this;
     }
 
-    /**
-     * Get amount
-     *
-     * @return amount
-     **/
+
     @Schema(example = "10.5", required = true, description = "")
 
     public double getAmount()
@@ -56,8 +60,12 @@ public class Balance
         return amount;
     }
 
-    public void setAmount(double amount)
+    public void setAmount(double amount) throws Exception
     {
+        if(amount < 0)
+        {
+            throw new InvalidAccountException("amount cant be less than zero");
+        }
         this.amount = amount;
     }
 
